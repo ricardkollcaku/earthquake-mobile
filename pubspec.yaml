@@ -27,6 +27,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  rxdart: ^0.23.1
+  shared_preferences: ^0.5.6
+  http: 0.12.0+2
+  flutter_stetho: ^0.5.2
 
 
 # For information on the generic Dart part of this file, see the
