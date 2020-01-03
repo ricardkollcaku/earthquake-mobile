@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:earthquake/data/model/error.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class UiHelper {
@@ -12,16 +8,15 @@ class UiHelper {
     currentScaffoldContext = context;
   }
 
-  static void _showSms(ErrorModel errorDto) {
+  static void _showSms(String error) {
     Scaffold.of(currentScaffoldContext).showSnackBar(SnackBar(
-        content: Text(
-            (errorDto.title != null ? errorDto.title : "Error" )+ "\n" +
-                (errorDto.message != null ? errorDto.message : "Error"))));
+        content: Text(error == null ? "Error" : error)));
   }
 
-  static void showError(http.Response response) {
-    _showSms(ErrorModel.fromJson(jsonDecode(response.body)));
+  static void showError(String error) {
+    _showSms(error);
   }
+
 
   int month = 1;
   int year;
@@ -61,9 +56,5 @@ class UiHelper {
     return DateFormat("HH:mm").format(dateTime);
   }
 
-  static void showErrorStreamResponse(http.StreamedResponse response) async {
-    _showSms(ErrorModel.fromJson(
-        jsonDecode((await(response.stream.bytesToString())))));
-  }
 
 }

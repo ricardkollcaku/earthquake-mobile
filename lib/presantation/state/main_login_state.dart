@@ -1,13 +1,18 @@
+import 'package:earthquake/domain/services/user_service.dart';
 import 'package:earthquake/presantation/activity/main_login_activity.dart';
+import 'package:earthquake/presantation/activity/main_non_login_activity.dart';
 import 'package:earthquake/presantation/fragment/earthquake_list_fragment.dart';
 import 'package:earthquake/presantation/fragment/filter_list_fragment.dart';
 import 'package:flutter/material.dart';
+
+import '../ui_helper.dart';
 
 class MainLoginState extends State<MainLoginActivity> {
   BuildContext _buildContext;
 
   int _selectedBottomNavigationBarIndex;
   Widget _currentActiveFragment;
+  UserService _userService;
 
   MainLoginState() {
     initVariables();
@@ -18,7 +23,10 @@ class MainLoginState extends State<MainLoginActivity> {
     _buildContext = context;
     return Scaffold(
       appBar: getAppBar(),
-      body: _currentActiveFragment,
+      body: Builder(builder: (BuildContext context) {
+        UiHelper.setCurrentScaffoldContext(context);
+        return _currentActiveFragment;
+      }),
       bottomNavigationBar: getBottomNavigationBar(),
     );
   }
@@ -57,7 +65,10 @@ class MainLoginState extends State<MainLoginActivity> {
   }
 
   void _onMenuSelected(Choice value) {
+    if (value == _choices[1])
+      logout();
   }
+
   List<Choice> _choices = <Choice>[
     Choice(prop1: 'Contact Us', prop2: Icons.phone),
     Choice(prop1: 'Logout', prop2: Icons.exit_to_app),
@@ -79,10 +90,20 @@ class MainLoginState extends State<MainLoginActivity> {
   }
 
   void initVariables() {
+    _userService = new UserService();
     _selectedBottomNavigationBarIndex = 0;
     _currentActiveFragment = _fragments[0].prop1;
   }
 
+  void logout() {
+    _userService.logout().listen(onData);
+    Navigator.of(_buildContext)
+        .pushReplacementNamed(MainNonLoginActivity.tag);
+  }
+
+
+  void onData(bool event) {
+  }
 }
 
 class Choice {

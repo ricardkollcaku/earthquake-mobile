@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPrefs {
   static final SharedPrefs _sharedPrefs = new SharedPrefs._internal();
   String _LOGIN = "isLogin";
+  String _TOKEN = "token";
+
   SharedPreferences _prefs;
 
   SharedPrefs._internal() {
@@ -30,10 +32,34 @@ class SharedPrefs {
   }
 
   Stream<bool> setLogin(bool login) {
-    return Stream.fromFuture(_prefs.setBool(_LOGIN, login));
+    return Stream.fromFuture(_prefs.setBool(_LOGIN, login))
+        .where((isSaved) => (isSaved))
+        .map((isSaved) => login);
   }
+
 
   getFalseOnNull(bool boolean) {
     return boolean == null ? false : boolean;
+  }
+
+  Stream<String> getToken() {
+    return Stream.value(_prefs.getString(_TOKEN))
+        .flatMap((bool) => getStringOrEmpty(bool));
+  }
+
+  Stream<bool> removeToken() {
+    return Stream.fromFuture(_prefs.remove(_TOKEN))
+        .where((isSaved) => (isSaved));
+  }
+
+  Stream<String> setToken(String token) {
+    return Stream
+        .fromFuture(_prefs.setString(_TOKEN, token))
+        .where((isSaved) => (isSaved))
+        .map((isSaved) => token);
+  }
+
+  Stream<String> getStringOrEmpty(String string) {
+    return string == null ? Stream.empty() : Stream.value(string);
   }
 }

@@ -3,6 +3,7 @@ import 'package:earthquake/presantation/activity/main_login_activity.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../ui_helper.dart';
 import 'main_non_login_activity.dart';
 
 class SplashScreenActivity extends StatelessWidget {
@@ -12,22 +13,25 @@ class SplashScreenActivity extends StatelessWidget {
 
   SplashScreenActivity() {
     _screenService = new SplashScreenService();
+    initApp();
+
   }
 
   @override
   Widget build(BuildContext context) {
     _buildContext = context;
-    initApp();
     return Scaffold(
-      body: Center(
-        child: Text("Splash Screen"),
-      ),
+      body: Builder(builder: (BuildContext context) {
+        UiHelper.setCurrentScaffoldContext(context);
+        return Center(child: Text("SplashScreenActivity"),);
+      }),
     );
   }
 
   void initApp() {
     _screenService
         .initLocalSharedPrefs()
+        .flatMap((shp) => _screenService.serverHeartBeat())
         .flatMap((shp) => _screenService.isLogin())
         .map((bool) => redirectToActivity(bool))
         .listen(onData);

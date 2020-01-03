@@ -1,5 +1,7 @@
 import 'package:earthquake/data/model/login.dart';
+import 'package:earthquake/domain/services/login_service.dart';
 import 'package:earthquake/presantation/activity/forgot_password_activity.dart';
+import 'package:earthquake/presantation/activity/main_login_activity.dart';
 import 'package:earthquake/presantation/fragment/login_fragment.dart';
 import 'package:flutter/material.dart';
 
@@ -7,9 +9,10 @@ import '../my_colors.dart';
 
 class LoginState extends State<LoginFragment> {
   Login _login;
-
+  LoginService _loginService;
   LoginState() {
     initVariables();
+    _loginService = new LoginService();
   }
 
   @override
@@ -92,6 +95,17 @@ class LoginState extends State<LoginFragment> {
   }
 
   void login() {
-    print("login");
+    _loginService.login(_login)
+        .where((isLogin) => isLogin)
+        .map((isLogin) => navigateHome())
+        .listen(onData);
+  }
+
+  void onData(event) {
+  }
+
+  navigateHome() {
+    Navigator.of(context)
+        .pushReplacementNamed(MainLoginActivity.tag);
   }
 }

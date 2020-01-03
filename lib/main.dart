@@ -8,10 +8,16 @@ import 'package:flutter_stetho/flutter_stetho.dart';
 
 void main() {
   Stetho.initialize();
-  runApp(new MyApp());
+  runApp(new MyApp(new SplashScreenActivity()));
+
+
 }
 
 class MyApp extends StatelessWidget {
+  SplashScreenActivity _splashScreenActivity;
+
+  MyApp(this._splashScreenActivity);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,7 +37,7 @@ class MyApp extends StatelessWidget {
               body2: TextStyle(fontSize: 12, color: MyColors.primaryText),
               title:
               TextStyle(fontSize: 24, color: MyColors.actionBarTextColor))),
-      home: SplashScreenActivity(),
+      home: _splashScreenActivity,
       onGenerateRoute: onGeneratedRoutes,
     );
   }
@@ -67,4 +73,6 @@ class MyApp extends StatelessWidget {
         );
     }
   }
+
+
 }

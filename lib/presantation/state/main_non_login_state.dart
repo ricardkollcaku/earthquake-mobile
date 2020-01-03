@@ -3,6 +3,8 @@ import 'package:earthquake/presantation/fragment/earthquake_list_fragment.dart';
 import 'package:earthquake/presantation/fragment/login_fragment.dart';
 import 'package:flutter/material.dart';
 
+import '../ui_helper.dart';
+
 class MainNonLoginState extends State<MainNonLoginActivity> {
   BuildContext _buildContext;
 
@@ -10,7 +12,7 @@ class MainNonLoginState extends State<MainNonLoginActivity> {
   Widget _currentActiveFragment;
 
   MainNonLoginState() {
-    initVariables();
+      initVariables();
   }
 
   @override
@@ -18,7 +20,10 @@ class MainNonLoginState extends State<MainNonLoginActivity> {
     _buildContext = context;
     return Scaffold(
       appBar: getAppBar(),
-      body: _currentActiveFragment,
+      body: Builder(builder: (BuildContext context) {
+        UiHelper.setCurrentScaffoldContext(context);
+        return _currentActiveFragment;
+      }),
       bottomNavigationBar: getBottomNavigationBar(),
     );
   }

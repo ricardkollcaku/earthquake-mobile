@@ -1,3 +1,4 @@
+import 'package:earthquake/data/model/token.dart';
 import 'package:earthquake/data/shared_prefs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,4 +20,12 @@ class SharedPrefsService {
   Stream<bool> setLogin(bool login) {
     return _sharedPrefs.setLogin(login);
   }
+
+  Stream<String> setToken(Token token) {
+    return _sharedPrefs.setToken(token.token);
+  }
+
+ Stream<bool> removeToken() {
+    return _sharedPrefs.removeToken();
+ }
 }
