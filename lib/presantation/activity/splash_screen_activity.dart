@@ -1,4 +1,5 @@
 import 'package:earthquake/domain/services/splash_screen_service.dart';
+import 'package:earthquake/presantation/activity/main_login_activity.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -35,7 +36,7 @@ class SplashScreenActivity extends StatelessWidget {
   redirectToActivity(bool isLogin) {
     if (isLogin)
       Navigator.of(_buildContext)
-          .pushReplacementNamed(MainNonLoginActivity.tag);
+          .pushReplacementNamed(MainLoginActivity.tag);
     else
       Navigator.of(_buildContext)
           .pushReplacementNamed(MainNonLoginActivity.tag);

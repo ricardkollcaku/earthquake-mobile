@@ -1,3 +1,4 @@
+import 'package:earthquake/presantation/activity/forgot_password_activity.dart';
 import 'package:earthquake/presantation/activity/main_login_activity.dart';
 import 'package:earthquake/presantation/activity/main_non_login_activity.dart';
 import 'package:earthquake/presantation/activity/splash_screen_activity.dart';
@@ -55,6 +56,13 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute(
           builder: (context) {
             return MainLoginActivity();
+          },
+        );
+
+      case ForgotPasswordActivity.tag:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ForgotPasswordActivity();
           },
         );
     }
