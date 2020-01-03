@@ -16,7 +16,5 @@ class MyColors {
   static const Color warning = Color(0xFFff9966);
   static const Color positive = Color(0xFF3CC9A4);
   static const Color background = Color(0xFFe8e8ea);
-  static const Color shadowColor =  Color(0xFF62686D);
-  
-
+  static const Color shadowColor = Color(0xFF62686D);
 }

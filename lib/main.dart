@@ -1,9 +1,9 @@
-import 'package:earthquake/presantation/activity/splash_screen.dart';
+import 'package:earthquake/presantation/activity/main_login_activity.dart';
+import 'package:earthquake/presantation/activity/main_non_login_activity.dart';
+import 'package:earthquake/presantation/activity/splash_screen_activity.dart';
 import 'package:earthquake/presantation/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stetho/flutter_stetho.dart';
-
-
 
 void main() {
   Stetho.initialize();
@@ -30,17 +30,31 @@ class MyApp extends StatelessWidget {
               body2: TextStyle(fontSize: 12, color: MyColors.primaryText),
               title:
               TextStyle(fontSize: 24, color: MyColors.actionBarTextColor))),
-      home: SplashScreen(),
+      home: SplashScreenActivity(),
       onGenerateRoute: onGeneratedRoutes,
     );
   }
 
   Route onGeneratedRoutes(RouteSettings settings) {
     switch (settings.name) {
-      case SplashScreen.tag:
+      case SplashScreenActivity.tag:
         return MaterialPageRoute(
           builder: (context) {
-            return SplashScreen();
+            return SplashScreenActivity();
+          },
+        );
+
+      case MainNonLoginActivity.tag:
+        return MaterialPageRoute(
+          builder: (context) {
+            return MainNonLoginActivity();
+          },
+        );
+
+      case MainLoginActivity.tag:
+        return MaterialPageRoute(
+          builder: (context) {
+            return MainLoginActivity();
           },
         );
     }
