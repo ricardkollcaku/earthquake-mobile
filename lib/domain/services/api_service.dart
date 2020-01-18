@@ -1,13 +1,16 @@
 import 'dart:convert';
 
 import 'package:earthquake/data/model/login.dart';
+import 'package:earthquake/data/model/register.dart';
 import 'package:earthquake/data/model/token.dart';
 import 'package:earthquake/presantation/ui_helper.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 
 class ApiService {
-  String baseUrl = "http://10.0.2.2:8080/api/v1/";
+//  String baseUrl = "http://10.0.2.2:8080/api/v1/";
+  String baseUrl = "http://192.168.178.61:8080/api/v1/";
+
   Map<String, String> header;
 
   ApiService({String token = ""}) {
@@ -42,4 +45,20 @@ class ApiService {
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error));
   }
+
+
+  Stream<Token> register(Register register) {
+    return Stream.fromFuture(http.post(baseUrl + "users/register",
+        body: (json.encode(register.toJson())), headers: header))
+        .flatMap((response) => onResponseArrived(response))
+        .onErrorResume((error) => onError(error))
+        .map((body) => Token.fromJson(jsonDecode(body)));
+  }
+
+  Stream<String> forgotPassword(String s) {
+    return Stream.fromFuture(http.post(baseUrl + "users/forgotPassword/$s"))
+        .flatMap((response) => onResponseArrived(response))
+        .onErrorResume((error) => onError(error));
+  }
+
 }

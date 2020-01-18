@@ -1,6 +1,7 @@
 import 'package:earthquake/presantation/activity/forgot_password_activity.dart';
 import 'package:earthquake/presantation/activity/main_login_activity.dart';
 import 'package:earthquake/presantation/activity/main_non_login_activity.dart';
+import 'package:earthquake/presantation/activity/register_activity.dart';
 import 'package:earthquake/presantation/activity/splash_screen_activity.dart';
 import 'package:earthquake/presantation/my_colors.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,13 @@ class MyApp extends StatelessWidget {
             return ForgotPasswordActivity();
           },
         );
+      case RegisterActivity.tag:
+        return MaterialPageRoute(
+          builder: (context) {
+            return RegisterActivity();
+          },
+        );
+
     }
   }
 

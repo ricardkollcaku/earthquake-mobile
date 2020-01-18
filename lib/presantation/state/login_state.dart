@@ -1,39 +1,56 @@
 import 'package:earthquake/data/model/login.dart';
-import 'package:earthquake/domain/services/login_service.dart';
+import 'package:earthquake/domain/services/user_service.dart';
+import 'package:earthquake/domain/util/util.dart';
 import 'package:earthquake/presantation/activity/forgot_password_activity.dart';
 import 'package:earthquake/presantation/activity/main_login_activity.dart';
+import 'package:earthquake/presantation/activity/register_activity.dart';
 import 'package:earthquake/presantation/fragment/login_fragment.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../my_colors.dart';
 
 class LoginState extends State<LoginFragment> {
   Login _login;
-  LoginService _loginService;
+  UserService _userService;
+  final _formKey = GlobalKey<FormState>();
   LoginState() {
     initVariables();
-    _loginService = new LoginService();
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Center(
+    return Form(key: _formKey, child: Center(
       child: ListView(
         shrinkWrap: true,
         padding: EdgeInsets.only(left: 24.0, right: 24.0),
         children: <Widget>[
           getLogo(),
           SizedBox(height: 48.0),
-          getHintedTextFormField("Username", false, setEmail, Icons.person),
+          getHintedTextFormField(
+              "Email", false, setEmail, Icons.person, getEmailValidator),
           SizedBox(height: 8.0),
-          getHintedTextFormField("Password", true, setPassword, Icons.vpn_key),
+          getHintedTextFormField("Password", true, setPassword, Icons.vpn_key,
+              getPasswordValidator),
           SizedBox(height: 24.0),
           getLoginButton(),
           getForgotLabel(),
+          getRegisterLabel(),
         ],
       ),
-    );
+    ),);
+  }
+
+  String getEmailValidator(String email) {
+    if (!Util.validateEmail(email)) return "Email is not valid";
+    return null;
+  }
+
+  String getPasswordValidator(String s) {
+    if (!Util.getStringLengthValidator(s, 6))
+      return "Password should be greater than 5 char";
+    return null;
   }
 
   void setEmail(String email) {
@@ -44,10 +61,11 @@ class LoginState extends State<LoginFragment> {
     _login.password = password;
   }
 
-  Widget getHintedTextFormField(
-      String hint, bool obscure, Function onSaved, IconData icon) {
-    return new TextField(
-      onChanged: onSaved,
+  Widget getHintedTextFormField(String hint, bool obscure, Function onSaved,
+      IconData icon, Function(String) validator) {
+    return new TextFormField(
+      validator: validator,
+      onSaved: onSaved,
       autofocus: false,
       obscureText: obscure,
       decoration: InputDecoration(
@@ -61,6 +79,7 @@ class LoginState extends State<LoginFragment> {
 
   void initVariables() {
     _login = Login();
+    _userService = new UserService();
   }
 
   Widget getLogo() {
@@ -95,7 +114,10 @@ class LoginState extends State<LoginFragment> {
   }
 
   void login() {
-    _loginService.login(_login)
+    Stream.value(_formKey.currentState.validate())
+        .where((b) => b)
+        .map((b) => fillLoginObject(b))
+        .flatMap((login) => _userService.login(login))
         .where((isLogin) => isLogin)
         .map((isLogin) => navigateHome())
         .listen(onData);
@@ -107,5 +129,22 @@ class LoginState extends State<LoginFragment> {
   navigateHome() {
     Navigator.of(context)
         .pushReplacementNamed(MainLoginActivity.tag);
+  }
+
+  getRegisterLabel() {
+    return new FlatButton(
+      child: Text(
+        'Register now.',
+        style: TextStyle(color: MyColors.primaryText),
+      ),
+      onPressed: () {
+        Navigator.pushNamed(context, RegisterActivity.tag);
+      },
+    );
+  }
+
+  Login fillLoginObject(bool b) {
+    _formKey.currentState.save();
+    return _login;
   }
 }
