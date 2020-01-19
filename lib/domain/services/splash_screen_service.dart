@@ -23,7 +23,9 @@ class SplashScreenService {
   }
 
   Stream<bool> isLogin() {
-    return _userService.isLogIn();
+    return _userService.isLogIn()
+        .flatMap((isLogin) =>
+    isLogin ? setTokenToApiService(isLogin) : Stream.value(isLogin));
   }
 
   Stream<String> serverHeartBeat() {
@@ -41,5 +43,21 @@ class SplashScreenService {
     return Stream.fromFuture(_deviceInfo.iosInfo)
         .map((ios) => ios.toString())
         .onErrorResume((th) => Stream.empty());
+  }
+
+  Stream<bool> saveCurrentUserOnShp(bool isLogin) {
+    return _apiService.getCurrentUser()
+        .flatMap((user) => _userService.setUser(user))
+        .map((user) => isLogin);
+  }
+
+  Stream<bool> setTokenToApiService(bool isLogin) {
+    return _sharedPrefsService.getToken()
+        .map((token) => setToken(token))
+        .map((token) => isLogin);
+  }
+
+  String setToken(String token) {
+    return _apiService.setToken(token);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:earthquake/data/model/user.dart';
 import 'package:earthquake/domain/services/user_service.dart';
 import 'package:earthquake/presantation/activity/main_login_activity.dart';
 import 'package:earthquake/presantation/activity/main_non_login_activity.dart';
@@ -14,6 +15,7 @@ class MainLoginState extends State<MainLoginActivity> {
   int _selectedBottomNavigationBarIndex;
   Widget _currentActiveFragment;
   UserService _userService;
+  static User _user;
 
   MainLoginState() {
     initVariables();
@@ -80,7 +82,7 @@ class MainLoginState extends State<MainLoginActivity> {
         icon: Icon(Icons.map), title: Text('Earthquake'))),
     Choice(prop1: FilterListFragment(), prop2: BottomNavigationBarItem(
         icon: Icon(Icons.filter_tilt_shift), title: Text('Filters'))),
-    Choice(prop1: SettingsFragment(), prop2: BottomNavigationBarItem(
+    Choice(prop1: SettingsFragment(_user), prop2: BottomNavigationBarItem(
         icon: Icon(Icons.settings), title: Text('Settings')))
   ];
 
@@ -96,6 +98,7 @@ class MainLoginState extends State<MainLoginActivity> {
     _userService = new UserService();
     _selectedBottomNavigationBarIndex = 0;
     _currentActiveFragment = _fragments[0].prop1;
+    _userService.getUser().map((user) => _setUser(user)).listen(onData);
   }
 
   void logout() {
@@ -105,7 +108,12 @@ class MainLoginState extends State<MainLoginActivity> {
   }
 
 
-  void onData(bool event) {
+  void onData(dynamic o) {
+  }
+
+  User _setUser(User user) {
+    _user = user;
+    return user;
   }
 }
 

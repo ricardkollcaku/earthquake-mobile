@@ -1,3 +1,4 @@
+import 'package:earthquake/presantation/activity/change_password_activity.dart';
 import 'package:earthquake/presantation/activity/forgot_password_activity.dart';
 import 'package:earthquake/presantation/activity/main_login_activity.dart';
 import 'package:earthquake/presantation/activity/main_non_login_activity.dart';
@@ -10,8 +11,6 @@ import 'package:flutter_stetho/flutter_stetho.dart';
 void main() {
   Stetho.initialize();
   runApp(new MyApp(new SplashScreenActivity()));
-
-
 }
 
 class MyApp extends StatelessWidget {
@@ -78,7 +77,12 @@ class MyApp extends StatelessWidget {
             return RegisterActivity();
           },
         );
-
+      case ChangePasswordActivity.tag:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ChangePasswordActivity();
+          },
+        );
     }
   }
 

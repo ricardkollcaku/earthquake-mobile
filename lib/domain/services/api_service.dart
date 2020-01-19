@@ -1,15 +1,17 @@
 import 'dart:convert';
 
+import 'package:earthquake/data/model/change_password.dart';
 import 'package:earthquake/data/model/login.dart';
 import 'package:earthquake/data/model/register.dart';
 import 'package:earthquake/data/model/token.dart';
+import 'package:earthquake/data/model/user.dart';
 import 'package:earthquake/presantation/ui_helper.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 
 class ApiService {
 //  String baseUrl = "http://10.0.2.2:8080/api/v1/";
-  String baseUrl = "http://192.168.178.61:8080/api/v1/";
+  String baseUrl = "http://192.168.0.15:8080/api/v1/";
 
   Map<String, String> header;
 
@@ -17,7 +19,15 @@ class ApiService {
     header = {
       "accept": "application/json",
       "content-type": "application/json",
-      "Authorization": token
+      "Authorization": "Bearer " + token
+    };
+  }
+
+  String setToken(String token) {
+    header = {
+      "accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": "Bearer " + token
     };
   }
 
@@ -59,6 +69,30 @@ class ApiService {
     return Stream.fromFuture(http.post(baseUrl + "users/forgotPassword/$s"))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error));
+  }
+
+  Stream<User> changePassword(ChangePassword changePassword) {
+    return Stream.fromFuture(http.put(baseUrl + "users/changePassword",
+        body: (json.encode(changePassword.toJson())), headers: header))
+        .flatMap((response) => onResponseArrived(response))
+        .onErrorResume((error) => onError(error))
+        .map((body) => User.fromJson(jsonDecode(body)));
+  }
+
+  Stream<User> changeNotification(User user) {
+    return Stream.fromFuture(http.post(baseUrl + "users/setNotification/" +
+        user.isNotificationEnabled.toString(), headers: header))
+        .flatMap((response) => onResponseArrived(response))
+        .onErrorResume((error) => onError(error))
+        .map((body) => User.fromJson(jsonDecode(body)));
+  }
+
+  Stream<User> getCurrentUser() {
+    return Stream.fromFuture(
+        http.get(baseUrl + "users/currentUser", headers: header))
+        .flatMap((response) => onResponseArrived(response))
+        .onErrorResume((error) => onError(error))
+        .map((body) => User.fromJson(jsonDecode(body)));
   }
 
 }

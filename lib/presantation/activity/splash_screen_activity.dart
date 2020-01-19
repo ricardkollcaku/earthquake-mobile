@@ -33,6 +33,10 @@ class SplashScreenActivity extends StatelessWidget {
         .initLocalSharedPrefs()
         .flatMap((shp) => _screenService.serverHeartBeat())
         .flatMap((shp) => _screenService.isLogin())
+        .flatMap((isLogin) =>
+    isLogin ?
+    _screenService.saveCurrentUserOnShp(isLogin) :
+    Stream.value(false))
         .map((bool) => redirectToActivity(bool))
         .listen(onData);
   }

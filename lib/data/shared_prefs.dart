@@ -5,6 +5,7 @@ class SharedPrefs {
   static final SharedPrefs _sharedPrefs = new SharedPrefs._internal();
   String _LOGIN = "isLogin";
   String _TOKEN = "token";
+  String _USER = "user";
 
   SharedPreferences _prefs;
 
@@ -61,5 +62,16 @@ class SharedPrefs {
 
   Stream<String> getStringOrEmpty(String string) {
     return string == null ? Stream.empty() : Stream.value(string);
+  }
+
+  Stream<String> setUser(String user) {
+    return Stream.fromFuture(_prefs.setString(_USER, user))
+        .where((isSaved) => (isSaved))
+        .map((isSaved) => user);
+  }
+
+  Stream<String> getUser() {
+    return Stream.value(_prefs.getString(_USER))
+        .flatMap((bool) => getStringOrEmpty(bool));
   }
 }

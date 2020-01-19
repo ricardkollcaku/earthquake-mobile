@@ -1,5 +1,7 @@
+import 'package:earthquake/data/model/change_password.dart';
 import 'package:earthquake/data/model/login.dart';
 import 'package:earthquake/data/model/register.dart';
+import 'package:earthquake/data/model/user.dart';
 import 'package:earthquake/domain/services/shared_prefs_service.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -46,5 +48,23 @@ class UserService {
 
   forgotPassword(String email) {
     return _apiService.forgotPassword(email);
+  }
+
+  changePassword(ChangePassword changePassword) {
+    return _apiService.changePassword(changePassword);
+  }
+
+  Stream<User> getUser() {
+    return _sharedPrefsService.getUser();
+  }
+
+  Stream<User> setNotificationToUser(User user) {
+    return _apiService
+        .changeNotification(user)
+        .flatMap((user) => setUser(user));
+  }
+
+  Stream<User> setUser(User user) {
+    return _sharedPrefsService.setUser(user);
   }
 }

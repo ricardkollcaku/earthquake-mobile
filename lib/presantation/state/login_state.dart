@@ -4,6 +4,7 @@ import 'package:earthquake/domain/util/util.dart';
 import 'package:earthquake/presantation/activity/forgot_password_activity.dart';
 import 'package:earthquake/presantation/activity/main_login_activity.dart';
 import 'package:earthquake/presantation/activity/register_activity.dart';
+import 'package:earthquake/presantation/activity/splash_screen_activity.dart';
 import 'package:earthquake/presantation/fragment/login_fragment.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
@@ -128,7 +129,7 @@ class LoginState extends State<LoginFragment> {
 
   navigateHome() {
     Navigator.of(context)
-        .pushReplacementNamed(MainLoginActivity.tag);
+        .pushReplacementNamed(SplashScreenActivity.tag);
   }
 
   getRegisterLabel() {
