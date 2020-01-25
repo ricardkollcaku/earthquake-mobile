@@ -6,11 +6,9 @@ import 'package:flutter/material.dart';
 
 class SettingsState extends State<SettingsFragment> {
   UserService _userService;
-  User _user;
 
 
-  SettingsState(User user) {
-    _user = user;
+  SettingsState() {
     initFields();
   }
 
@@ -31,7 +29,7 @@ class SettingsState extends State<SettingsFragment> {
   Widget getNotification() {
     return Card(
       child: SwitchListTile(
-        value: _user.isNotificationEnabled,
+        value: UserService.user.isNotificationEnabled,
         title: Text("Earthquake Notifications"),
         onChanged: setNotification,
       ),
@@ -49,7 +47,7 @@ class SettingsState extends State<SettingsFragment> {
   }
 
   void setNotification(bool value) {
-    User user = User.clone(_user);
+    User user = User.clone(UserService.user);
     user.isNotificationEnabled = value;
     _userService.setNotificationToUser(user).listen(updateUser);
   }
@@ -60,7 +58,7 @@ class SettingsState extends State<SettingsFragment> {
 
   void updateUser(User user) {
     setState(() {
-      _user = user;
+      UserService.user = user;
     });
   }
 }

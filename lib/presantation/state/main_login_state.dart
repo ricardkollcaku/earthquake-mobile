@@ -15,7 +15,6 @@ class MainLoginState extends State<MainLoginActivity> {
   int _selectedBottomNavigationBarIndex;
   Widget _currentActiveFragment;
   UserService _userService;
-  static User _user;
 
   MainLoginState() {
     initVariables();
@@ -82,7 +81,7 @@ class MainLoginState extends State<MainLoginActivity> {
         icon: Icon(Icons.map), title: Text('Earthquake'))),
     Choice(prop1: FilterListFragment(), prop2: BottomNavigationBarItem(
         icon: Icon(Icons.filter_tilt_shift), title: Text('Filters'))),
-    Choice(prop1: SettingsFragment(_user), prop2: BottomNavigationBarItem(
+    Choice(prop1: SettingsFragment(), prop2: BottomNavigationBarItem(
         icon: Icon(Icons.settings), title: Text('Settings')))
   ];
 
@@ -112,7 +111,7 @@ class MainLoginState extends State<MainLoginActivity> {
   }
 
   User _setUser(User user) {
-    _user = user;
+    UserService.user = user;
     return user;
   }
 }

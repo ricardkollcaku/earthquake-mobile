@@ -38,10 +38,12 @@ class ChangePasswordState extends State<ChangePasswordActivity> {
                 children: <Widget>[
                   getLogo(),
                   SizedBox(height: 48.0),
-                  getHintedTextFormField("OldPassword", true, setOldPassword,
-                      Icons.lock, getEmailValidator),
-                  getHintedTextFormField("newPassword", true, setNewPassword,
-                      Icons.lock, getEmailValidator),
+                  getHintedTextFormField("Old Password", true, setOldPassword,
+                      Icons.lock, getPasswordValidator),
+                  SizedBox(height: 8.0),
+
+                  getHintedTextFormField("New Password", true, setNewPassword,
+                      Icons.lock, getPasswordValidator),
                   SizedBox(height: 24.0),
                   getChangePasswordButton(),
                 ],
@@ -55,10 +57,12 @@ class ChangePasswordState extends State<ChangePasswordActivity> {
     return Container();
   }
 
-  String getEmailValidator(String email) {
-    if (!Util.validateEmail(email)) return "Email is not valid";
+  String getPasswordValidator(String s) {
+    if (!Util.getStringLengthValidator(s, 6))
+      return "Password should be greater than 5 char";
     return null;
   }
+
 
   Widget getHintedTextFormField(String hint, bool obscure, Function onSaved,
       IconData icon, Function(String) validator) {
@@ -86,7 +90,7 @@ class ChangePasswordState extends State<ChangePasswordActivity> {
         onPressed: changePassword,
         padding: EdgeInsets.all(12),
         color: MyColors.accent,
-        child: Text('Forgot Password', style: TextStyle(color: Colors.white)),
+        child: Text('Change Password', style: TextStyle(color: Colors.white)),
       ),
     );
   }

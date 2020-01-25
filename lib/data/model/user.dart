@@ -30,5 +30,6 @@ class User {
     clonedUser.lastname = user.lastname;
     clonedUser.firstname = user.firstname;
     clonedUser.isNotificationEnabled = user.isNotificationEnabled;
+    return clonedUser;
   }
 }

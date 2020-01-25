@@ -9,6 +9,7 @@ import 'api_service.dart';
 class UserService {
   SharedPrefsService _sharedPrefsService;
   ApiService _apiService;
+  static User user;
 
 
   UserService() {

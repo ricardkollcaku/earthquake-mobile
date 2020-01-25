@@ -14,20 +14,24 @@ class ApiService {
   String baseUrl = "http://192.168.0.15:8080/api/v1/";
 
   Map<String, String> header;
+  static String _token = "";
 
   ApiService({String token = ""}) {
+    if (token != "")
+      _token = token;
     header = {
       "accept": "application/json",
       "content-type": "application/json",
-      "Authorization": "Bearer " + token
+      "Authorization": "Bearer " + _token
     };
   }
 
   String setToken(String token) {
+    _token = token;
     header = {
       "accept": "application/json",
       "content-type": "application/json",
-      "Authorization": "Bearer " + token
+      "Authorization": "Bearer " + _token
     };
   }
 
@@ -41,6 +45,10 @@ class ApiService {
 
   Stream<String> onResponseArrived(http.Response response) {
     if (response.statusCode == 200) return Stream.value(response.body);
+    if(response.statusCode==401){
+      UiHelper.showError("User is unauthorized");
+      return Stream.empty();
+    }
     UiHelper.showError(response.headers["error"]);
     return Stream.empty();
   }
@@ -80,7 +88,7 @@ class ApiService {
   }
 
   Stream<User> changeNotification(User user) {
-    return Stream.fromFuture(http.post(baseUrl + "users/setNotification/" +
+    return Stream.fromFuture(http.put(baseUrl + "users/setNotification/" +
         user.isNotificationEnabled.toString(), headers: header))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error))
