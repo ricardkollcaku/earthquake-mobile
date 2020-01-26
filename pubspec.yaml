@@ -27,7 +27,8 @@ dependencies:
   flutter_stetho: ^0.5.2
   intl: ^0.16.0
   device_info: ^0.4.1+4
-
+  lazy_load_scrollview: ^1.0.1
+  loadany: ^0.1.2
 
 dev_dependencies:
   flutter_test:
@@ -45,6 +46,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/tsunami.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

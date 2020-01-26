@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:earthquake/data/model/change_password.dart';
+import 'package:earthquake/data/model/earthquake.dart';
 import 'package:earthquake/data/model/login.dart';
 import 'package:earthquake/data/model/register.dart';
 import 'package:earthquake/data/model/token.dart';
@@ -47,15 +48,15 @@ class ApiService {
     if (response.statusCode == 200) return Stream.value(response.body);
     if(response.statusCode==401){
       UiHelper.showError("User is unauthorized");
-      return Stream.empty();
+      return Stream.error("User is unauthorized");
     }
     UiHelper.showError(response.headers["error"]);
-    return Stream.empty();
+    return Stream.error("error");
   }
 
   Stream<String> onError(error) {
     UiHelper.showError("Error comunicating with server");
-    return Stream.empty();
+    return Stream.error(error);
   }
 
   Stream<String> heartBeat(String s) {
@@ -101,6 +102,17 @@ class ApiService {
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error))
         .map((body) => User.fromJson(jsonDecode(body)));
+  }
+
+  Stream<Earthquake> getAllEarthquakes(int pageNr, int elementPerPage) {
+    return Stream.fromFuture(
+        http.get(baseUrl +
+            "earthquake/all?pageNumber=$pageNr&elementPerPage=$elementPerPage",
+            headers: header))
+        .flatMap((response) => onResponseArrived(response))
+        .onErrorResume((error) => onError(error))
+        .flatMap((body) => Stream.fromIterable(jsonDecode(body)))
+        .map((s) => Earthquake.fromJson(s));
   }
 
 }
