@@ -1,6 +1,8 @@
 class Earthquake {
   String id;
   String type;
+  String country;
+  String countryCode;
   Properties properties;
   Geometry geometry;
   double depth;
@@ -13,11 +15,14 @@ class Earthquake {
   @override
   int get hashCode => id.hashCode;
 
-  Earthquake({this.id, this.type, this.properties, this.geometry, this.depth});
+  Earthquake({this.id, this.type,this.country, this.properties, this.geometry, this.depth});
 
   Earthquake.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     type = json['type'];
+    country = json['country'];
+    countryCode = json['countryCode'];
+
     properties = json['properties'] != null
         ? new Properties.fromJson(json['properties'])
         : null;
@@ -31,6 +36,9 @@ class Earthquake {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['type'] = this.type;
+    data['country'] = this.country;
+    data['countryCode'] = this.countryCode;
+
     if (this.properties != null) {
       data['properties'] = this.properties.toJson();
     }

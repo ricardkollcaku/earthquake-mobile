@@ -1,9 +1,13 @@
+import 'package:earthquake/data/model/country.dart';
 import 'package:earthquake/data/model/earthquake.dart';
 import 'package:earthquake/presantation/my_colors.dart';
 import 'package:earthquake/presantation/my_icons.dart';
+import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loadany/loadany.dart';
+import 'package:timeago/timeago.dart' as timeago;
+
 
 class EarthquakeListView {
   double _loadingFooterHeight;
@@ -122,20 +126,14 @@ class EarthquakeListView {
           children: <Widget>[
             Text(
               earthquake.properties.title,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
             Row(
               children: <Widget>[
                 Expanded(
                   flex: 3,
-                  child: Text(
-                    earthquake.properties.mag.toString(),
-                    style: TextStyle(
-                        fontSize: 30,
-                        color: earthquake.properties.mag > 4
-                            ? MyColors.error
-                            : MyColors.positive),
-                  ),
+                  child: _getCountryFlag(earthquake),
                 ),
                 Expanded(
                   flex: 12,
@@ -154,7 +152,8 @@ class EarthquakeListView {
                               SizedBox(
                                 width: 3,
                               ),
-                              Text(earthquake.properties.place)
+                              Text(earthquake.properties.place,
+                                overflow: TextOverflow.ellipsis,)
                             ],
                           ),
                           Row(
@@ -171,19 +170,22 @@ class EarthquakeListView {
                           ),
                         ],
                       ),
-                      earthquake.properties.tsunami == 1
+                      earthquake.properties.tsunami == 0
                           ? Row(
-                              children: <Widget>[
-                                Image.asset(
+                        children: <Widget>[
+                          _getMagnitude(earthquake)
+
+
+                          /* Image.asset(
                                   MyIcons.TSUNAMI,
                                   width: 40,
                                   height: 40,
                                 ),
                                 SizedBox(
                                   width: 3,
-                                )
-                              ],
-                            )
+                                )*/
+                        ],
+                      )
                           : Container(),
                     ],
                   ),
@@ -191,14 +193,58 @@ class EarthquakeListView {
               ],
             )
           ],
-        ),
-      ),
+        )
+        ,
+      )
+      ,
     );
   }
 
   getTime(int time) {
-    return DateFormat.yMEd()
-        .add_jms()
-        .format(new DateTime.fromMillisecondsSinceEpoch(time));
+    return timeago.format(DateTime.fromMillisecondsSinceEpoch(time)) + "\n" +
+        DateFormat.yMEd()
+            .add_jms()
+            .format(new DateTime.fromMillisecondsSinceEpoch(time));
+  }
+
+  Widget _getCountryFlag(Earthquake earthquake) {
+    if (earthquake.country == null)
+      return Container();
+    String countryCode;
+    if (earthquake.country.length == 2)
+      countryCode = earthquake.country;
+    if (countryCode == null)
+      countryCode = CountryProvider.getCountryCode(earthquake.country);
+    if (countryCode == null)
+      return Container();
+    try {
+      return Flags.getMiniFlag(countryCode, null, 50);
+    } catch (e) {
+      return Container();
+    }
+  }
+
+  Widget _getMagnitude(Earthquake earthquake) {
+    if (earthquake.properties.tsunami == 0)
+      return Text(
+        earthquake.properties.mag.toString(),
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+            fontSize: 25,
+            color: earthquake.properties.mag > 4
+                ? MyColors.error
+                : MyColors.positive),
+      );
+    return Column(children: <Widget>[
+      Image.asset(MyIcons.TSUNAMI, width: 25, height: 25,), Text(
+        earthquake.properties.mag.toString(),
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+            fontSize: 20,
+            color: earthquake.properties.mag > 4
+                ? MyColors.error
+                : MyColors.positive),
+      )
+    ],);
   }
 }
