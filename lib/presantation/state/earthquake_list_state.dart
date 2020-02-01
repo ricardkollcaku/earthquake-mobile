@@ -51,7 +51,7 @@ class EarthquakeListState extends State<EarthquakeListFragment> {
     _earthquakeService = new EarthquakeService();
     _earthquakeListView = new EarthquakeListView(40, getLoadMore);
     _pageNumber = 0;
-    _elementPerPage = 20;
+    _elementPerPage = 50;
     getData(addRefreshing);
   }
 

@@ -1,4 +1,5 @@
 import 'package:earthquake/presantation/activity/change_password_activity.dart';
+import 'package:earthquake/presantation/activity/filter_activity.dart';
 import 'package:earthquake/presantation/activity/forgot_password_activity.dart';
 import 'package:earthquake/presantation/activity/main_login_activity.dart';
 import 'package:earthquake/presantation/activity/main_non_login_activity.dart';
@@ -81,6 +82,12 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute(
           builder: (context) {
             return ChangePasswordActivity();
+          },
+        );
+      case FilterActivity.tag:
+        return MaterialPageRoute(
+          builder: (context) {
+            return FilterActivity();
           },
         );
     }

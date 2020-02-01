@@ -1,4 +1,3 @@
-import 'package:earthquake/data/model/country.dart';
 import 'package:earthquake/data/model/earthquake.dart';
 import 'package:earthquake/presantation/my_colors.dart';
 import 'package:earthquake/presantation/my_icons.dart';
@@ -152,7 +151,8 @@ class EarthquakeListView {
                               SizedBox(
                                 width: 3,
                               ),
-                              Text(earthquake.properties.place,
+                              Text(truncateWithEllipsis(
+                                  35, earthquake.properties.place),
                                 overflow: TextOverflow.ellipsis,)
                             ],
                           ),
@@ -208,23 +208,18 @@ class EarthquakeListView {
   }
 
   Widget _getCountryFlag(Earthquake earthquake) {
-    if (earthquake.country == null)
-      return Container();
-    String countryCode;
-    if (earthquake.country.length == 2)
-      countryCode = earthquake.country;
-    if (countryCode == null)
-      countryCode = CountryProvider.getCountryCode(earthquake.country);
-    if (countryCode == null)
+    if (earthquake.countryCode == null)
       return Container();
     try {
-      return Flags.getMiniFlag(countryCode, null, 50);
+      return Flags.getMiniFlag(earthquake.countryCode, null, 50);
     } catch (e) {
       return Container();
     }
   }
 
   Widget _getMagnitude(Earthquake earthquake) {
+    if (earthquake.properties.mag == null)
+      return new Container();
     if (earthquake.properties.tsunami == 0)
       return Text(
         earthquake.properties.mag.toString(),
@@ -246,5 +241,12 @@ class EarthquakeListView {
                 : MyColors.positive),
       )
     ],);
+  }
+
+
+  String truncateWithEllipsis(int cutoff, String myString) {
+    return (myString.length <= cutoff)
+        ? myString
+        : '${myString.substring(0, cutoff)}...';
   }
 }

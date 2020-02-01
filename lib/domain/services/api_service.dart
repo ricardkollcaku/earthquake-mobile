@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:earthquake/data/model/change_password.dart';
 import 'package:earthquake/data/model/earthquake.dart';
+import 'package:earthquake/data/model/filter.dart';
 import 'package:earthquake/data/model/login.dart';
 import 'package:earthquake/data/model/register.dart';
 import 'package:earthquake/data/model/token.dart';
@@ -114,6 +115,26 @@ class ApiService {
         .onErrorResume((error) => onError(error))
         .flatMap((body) => Stream.fromIterable(jsonDecode(body)))
         .map((s) => Earthquake.fromJson(s));
+  }
+
+  Stream<Filter> getAllFilter() {
+    return Stream.fromFuture(
+        http.get(baseUrl + "filters",
+            headers: header))
+        .flatMap((response) => onResponseArrived(response))
+        .onErrorResume((error) => onError(error))
+        .flatMap((body) => Stream.fromIterable(jsonDecode(body)))
+        .map((s) => Filter.fromJson(s));
+  }
+
+  Stream<Filter> removeFilter(Filter filter) {
+    return Stream.fromFuture(
+        http.put(baseUrl + "filters",
+            headers: header, body: (json.encode(filter.toJson()))))
+        .flatMap((response) => onResponseArrived(response))
+        .onErrorResume((error) => onError(error))
+        .map((body) => jsonDecode(body))
+        .map((s) => Filter.fromJson(s));
   }
 
 }

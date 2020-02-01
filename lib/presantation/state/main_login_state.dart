@@ -1,10 +1,12 @@
 import 'package:earthquake/data/model/user.dart';
 import 'package:earthquake/domain/services/user_service.dart';
+import 'package:earthquake/presantation/activity/filter_activity.dart';
 import 'package:earthquake/presantation/activity/main_login_activity.dart';
 import 'package:earthquake/presantation/activity/main_non_login_activity.dart';
 import 'package:earthquake/presantation/fragment/earthquake_list_fragment.dart';
 import 'package:earthquake/presantation/fragment/filter_list_fragment.dart';
 import 'package:earthquake/presantation/fragment/settings_fragment.dart';
+import 'package:earthquake/presantation/my_colors.dart';
 import 'package:flutter/material.dart';
 
 import '../ui_helper.dart';
@@ -15,7 +17,7 @@ class MainLoginState extends State<MainLoginActivity> {
   int _selectedBottomNavigationBarIndex;
   Widget _currentActiveFragment;
   UserService _userService;
-
+  Widget _fab;
   MainLoginState() {
     initVariables();
   }
@@ -25,6 +27,7 @@ class MainLoginState extends State<MainLoginActivity> {
     _buildContext = context;
     return Scaffold(
       appBar: getAppBar(),
+      floatingActionButton: _fab,
       body: Builder(builder: (BuildContext context) {
         UiHelper.setCurrentScaffoldContext(context);
         return _currentActiveFragment;
@@ -88,12 +91,17 @@ class MainLoginState extends State<MainLoginActivity> {
 
   void _onBottomNavigationBarItemSelected(int value) {
     setState(() {
+      if (_fragments[value].prop1 is FilterListFragment)
+        _fab = _getFab();
+      else
+        _fab = Container();
       _selectedBottomNavigationBarIndex = value;
       _currentActiveFragment = _fragments[value].prop1;
     });
   }
 
   void initVariables() {
+    _fab = Container();
     _userService = new UserService();
     _selectedBottomNavigationBarIndex = 0;
     _currentActiveFragment = _fragments[0].prop1;
@@ -114,6 +122,15 @@ class MainLoginState extends State<MainLoginActivity> {
     UserService.user = user;
     return user;
   }
+
+  Widget _getFab() {
+    return FloatingActionButton(child: Icon(Icons.add,color: MyColors.white,),onPressed: onFabPressed,);
+  }
+
+  void onFabPressed() {
+    Navigator.of(_buildContext)
+        .pushNamed(FilterActivity.tag);
+  }
 }
 
 class Choice {
@@ -121,4 +138,5 @@ class Choice {
 
   var prop1;
   var prop2;
+
 }
