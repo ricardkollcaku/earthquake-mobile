@@ -15,7 +15,7 @@ class EarthquakeListState extends State<EarthquakeListFragment> {
   EarthquakeListView _earthquakeListView;
   int _pageNumber, _elementPerPage;
   EarthquakeService _earthquakeService;
-
+BuildContext _context;
   EarthquakeListState() {
     initField();
   }
@@ -23,6 +23,7 @@ class EarthquakeListState extends State<EarthquakeListFragment> {
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     // TODO: implement build
     return LoadAny(
         onLoadMore: getLoadMore,
@@ -49,7 +50,7 @@ class EarthquakeListState extends State<EarthquakeListFragment> {
   void initField() {
     _earthquakeList = new Set();
     _earthquakeService = new EarthquakeService();
-    _earthquakeListView = new EarthquakeListView(40, getLoadMore);
+    _earthquakeListView = new EarthquakeListView(40, getLoadMore,context);
     _pageNumber = 0;
     _elementPerPage = 50;
     getData(addRefreshing);

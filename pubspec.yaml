@@ -32,6 +32,8 @@ dependencies:
   flag: ^1.0.2
   country_pickers: ^1.1.0
   timeago: ^2.0.25
+  flutter_map: ^0.8.2
+  searchable_dropdown: ^1.1.0
 
 dev_dependencies:
   flutter_test:

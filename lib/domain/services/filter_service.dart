@@ -1,3 +1,4 @@
+import 'package:earthquake/data/model/country.dart';
 import 'package:earthquake/data/model/filter.dart';
 
 import 'api_service.dart';
@@ -19,5 +20,9 @@ class FilterService {
 
   Stream<Filter> remove(Filter filter) {
     return _apiService.removeFilter(filter);
+  }
+
+  Stream<Country> getCountries() {
+    return _apiService.getAllCountries();
   }
 }

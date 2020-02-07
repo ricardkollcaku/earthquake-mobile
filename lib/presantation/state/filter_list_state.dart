@@ -21,7 +21,6 @@ class FilterListState extends State<FilterListFragment> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return ListView.builder(
-        padding: const EdgeInsets.all(8),
         itemCount: _filterList.length,
         itemBuilder: (BuildContext context, int index) {
           return _filterListView.buildItem(

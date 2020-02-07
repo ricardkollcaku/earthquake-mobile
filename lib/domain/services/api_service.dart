@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:earthquake/data/model/change_password.dart';
+import 'package:earthquake/data/model/country.dart';
 import 'package:earthquake/data/model/earthquake.dart';
 import 'package:earthquake/data/model/filter.dart';
 import 'package:earthquake/data/model/login.dart';
@@ -135,6 +136,16 @@ class ApiService {
         .onErrorResume((error) => onError(error))
         .map((body) => jsonDecode(body))
         .map((s) => Filter.fromJson(s));
+  }
+
+  Stream<Country> getAllCountries() {
+   return Stream.fromFuture(
+        http.get(baseUrl + "country",
+            headers: header))
+        .flatMap((response) => onResponseArrived(response))
+        .onErrorResume((error) => onError(error))
+        .flatMap((body) => Stream.fromIterable(jsonDecode(body)))
+        .map((s) => Country.fromJson(s));
   }
 
 }

@@ -1,4 +1,6 @@
 import 'package:earthquake/data/model/earthquake.dart';
+import 'package:earthquake/presantation/activity/earthquake_activity.dart';
+import 'package:earthquake/presantation/activity/filter_activity.dart';
 import 'package:earthquake/presantation/my_colors.dart';
 import 'package:earthquake/presantation/my_icons.dart';
 import 'package:flag/flag.dart';
@@ -11,8 +13,9 @@ import 'package:timeago/timeago.dart' as timeago;
 class EarthquakeListView {
   double _loadingFooterHeight;
   Function _loadMore;
+  BuildContext _context;
 
-  EarthquakeListView(this._loadingFooterHeight, this._loadMore);
+  EarthquakeListView(this._loadingFooterHeight, this._loadMore,this._context);
 
   Widget _buildLoading(double height) {
     return Container(
@@ -40,6 +43,7 @@ class EarthquakeListView {
   }
 
   Widget loadMoreBuilder(BuildContext context, LoadStatus status) {
+    _context=context;
     if (status == LoadStatus.loading) {
       return _buildLoading(_loadingFooterHeight);
     } else if (status == LoadStatus.error) {
@@ -117,7 +121,7 @@ class EarthquakeListView {
   }
 
   Widget buildItem(Earthquake earthquake) {
-    return Card(
+    return GestureDetector(onTap: () => openEarthquake(earthquake), child: Card(
       child: Container(
         padding: EdgeInsets.all(10),
         child: Column(
@@ -197,7 +201,7 @@ class EarthquakeListView {
         ,
       )
       ,
-    );
+    ),);
   }
 
   getTime(int time) {
@@ -222,7 +226,7 @@ class EarthquakeListView {
       return new Container();
     if (earthquake.properties.tsunami == 0)
       return Text(
-        earthquake.properties.mag.toString(),
+        earthquake.properties.mag.toStringAsPrecision(2),
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
             fontSize: 25,
@@ -248,5 +252,12 @@ class EarthquakeListView {
     return (myString.length <= cutoff)
         ? myString
         : '${myString.substring(0, cutoff)}...';
+  }
+
+  openEarthquake(Earthquake earthquake) {
+    print(_context);
+    Navigator.push(_context, MaterialPageRoute(builder: (BuildContext context) => EarthquakeActivity(earthquake)));
+
+
   }
 }

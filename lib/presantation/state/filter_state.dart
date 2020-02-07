@@ -1,12 +1,13 @@
-import 'package:earthquake/data/model/change_password.dart';
+import 'package:earthquake/data/model/country.dart';
 import 'package:earthquake/data/model/filter.dart';
-import 'package:earthquake/domain/services/user_service.dart';
+import 'package:earthquake/domain/services/filter_service.dart';
 import 'package:earthquake/domain/util/util.dart';
-import 'package:earthquake/presantation/activity/change_password_activity.dart';
 import 'package:earthquake/presantation/activity/filter_activity.dart';
-import 'package:earthquake/presantation/activity/main_non_login_activity.dart';
+import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong/latlong.dart';
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 
 import '../my_colors.dart';
 import '../ui_helper.dart';
@@ -15,8 +16,10 @@ class FilterState extends State<FilterActivity> {
   BuildContext _buildContext;
 
   final _formKey = GlobalKey<FormState>();
-  UserService _userService;
   Filter _filter;
+  List<Country> _countries;
+  FilterService _filterService;
+  Country _selectedCountry;
 
   FilterState({Filter filter}) {
     _filter = filter;
@@ -35,22 +38,27 @@ class FilterState extends State<FilterActivity> {
           UiHelper.setCurrentScaffoldContext(_buildContext);
           return Form(
             key: _formKey,
-            child: Center(
-              child: ListView(
-                shrinkWrap: true,
-                padding: EdgeInsets.only(left: 24.0, right: 24.0),
-                children: <Widget>[
-                  getLogo(),
-                  SizedBox(height: 48.0),
-                  getHintedTextFormField("Old Password", true, setOldPassword,
-                      Icons.lock, getPasswordValidator),
-                  SizedBox(height: 8.0),
-                  getHintedTextFormField("New Password", true, setNewPassword,
-                      Icons.lock, getPasswordValidator),
-                  SizedBox(height: 24.0),
-                  getChangePasswordButton(),
-                ],
+            child: GestureDetector(
+              child: Card(
+                child: ListView(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(left: 24.0, right: 24.0),
+                  children: <Widget>[
+                    getLogo(),
+                    SizedBox(height: 8.0),
+                    getHintedTextFormField("Filter Name", false, setFilter,
+                        Icons.lock, getFilterValidator),
+                    SizedBox(height: 24.0),
+                    getCountriesDropdown(),
+
+                    /*   SizedBox(height: 24.0),
+                    getMap(context),*/
+                    SizedBox(height: 24.0),
+                    getSaveFilterButton(),
+                  ],
+                ),
               ),
+              onTap: removeFocus,
             ),
           );
         }));
@@ -60,9 +68,27 @@ class FilterState extends State<FilterActivity> {
     return Container();
   }
 
-  String getPasswordValidator(String s) {
+  void removeFocus() {
+    FocusScope.of(context).requestFocus(new FocusNode());
+  }
+
+  Widget getCountriesDropdown() {
+    return SearchableDropdown(
+      items: _countries.map<DropdownMenuItem<Country>>(createDropDown).toList(),
+      onChanged: (value) {
+        onDropDownSelect(value);
+      },
+      hint: Text("Select Country"),
+      searchHint: Text("Select 1 country"),
+      isExpanded: true,
+      value: _selectedCountry,
+      isCaseSensitiveSearch: false,
+    );
+  }
+
+  String getFilterValidator(String s) {
     if (!Util.getStringLengthValidator(s, 6))
-      return "Password should be greater than 5 char";
+      return "Filter should be greater than 5 char";
     return null;
   }
 
@@ -76,41 +102,34 @@ class FilterState extends State<FilterActivity> {
       decoration: InputDecoration(
         labelText: hint,
         prefixIcon: Icon(icon),
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
       ),
     );
   }
 
-  Widget getChangePasswordButton() {
+  Widget getSaveFilterButton() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        onPressed: changePassword,
+        onPressed: changeFilter,
         padding: EdgeInsets.all(12),
         color: MyColors.accent,
-        child: Text('Change Password', style: TextStyle(color: Colors.white)),
+        child: Text('Save Filter', style: TextStyle(color: Colors.white)),
       ),
     );
   }
 
-  void changePassword() {
+  void changeFilter() {
     UiHelper.setCurrentScaffoldContext(_buildContext);
-    Stream.value(_formKey.currentState.validate())
-        .where((b) => b)
-        .map((b) => saveState(b))
-       /* .flatMap(
-            (changePassword) => _userService.changePassword(changePassword))*/
-        .flatMap((user) => _userService.logout())
-        .listen(onSuccess);
   }
 
   void initFields() {
-    _userService = new UserService();
     if (_filter == null) _filter = new Filter();
+    _filterService = new FilterService();
+    _countries = new List();
+    getCountries();
   }
 
   Filter saveState(bool b) {
@@ -122,10 +141,81 @@ class FilterState extends State<FilterActivity> {
     Navigator.pop(_buildContext);
   }
 
-  setOldPassword(String password) {
+  setFilter(String filter) {}
 
+  void getCountries() {
+    _filterService.getCountries().toList().asStream().listen(addCountries);
   }
 
-  setNewPassword(String password) {
+  void addCountries(List<Country> event) {
+    setState(() {
+      _countries = event;
+    });
+  }
+
+  Widget _getCountryFlag(String countryCode) {
+    if (countryCode == null)
+      return Container(
+        width: 15,
+        height: 15,
+      );
+    try {
+      return Flags.getMiniFlag(countryCode, null, 30);
+    } catch (e) {
+      return Container(
+        width: 15,
+        height: 15,
+      );
+    }
+  }
+
+  DropdownMenuItem<Country> createDropDown(Country e) {
+    return new DropdownMenuItem(
+        child: ListTile(
+          leading: _getCountryFlag(e.countryCode),
+          title: Text(e.country),
+          trailing: e.countryCode == null
+              ? Container(
+            width: 15,
+            height: 15,
+          )
+              : Text(e.countryCode),
+        ),
+        value: e);
+  }
+
+  void onDropDownSelect(Country country) {
+    setState(() {
+      _selectedCountry = country;
+    });
+  }
+
+
+  Widget getMap(BuildContext context) {
+    return Container(height: 300, child: FlutterMap(
+      options: new MapOptions(
+        center: new LatLng(51.5, -0.09),
+        zoom: 13.0,
+      ),
+      layers: [
+        new TileLayerOptions(
+          urlTemplate: "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+        ),
+        new MarkerLayerOptions(
+          markers: [
+            new Marker(
+              width: 80.0,
+              height: 80.0,
+              point: new LatLng(51.5, -0.09),
+              builder: (ctx) =>
+              new Container(
+                //,
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),);
   }
 }
