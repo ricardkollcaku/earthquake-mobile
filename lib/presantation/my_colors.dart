@@ -17,4 +17,14 @@ class MyColors {
   static const Color positive = Color(0xFF3CC9A4);
   static const Color background = Color(0xFFe8e8ea);
   static const Color shadowColor = Color(0xFF62686D);
+
+
+ static getColor(double mag){
+    if(mag<=4)
+      return positive;
+    else if(mag <6)
+      return warning;
+    else
+      return error;
+  }
 }

@@ -59,7 +59,7 @@ class FilterListView {
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
           fontSize: 25,
-          color: filter.minMagnitude > 4 ? MyColors.error : MyColors.positive),
+          color:  MyColors.getColor(filter.minMagnitude)),
     );
   }
 

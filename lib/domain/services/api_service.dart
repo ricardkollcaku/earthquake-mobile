@@ -118,6 +118,17 @@ class ApiService {
         .map((s) => Earthquake.fromJson(s));
   }
 
+  Stream<Earthquake> getUserAllEarthquakes(int pageNr, int elementPerPage) {
+    return Stream.fromFuture(
+        http.get(baseUrl +
+            "earthquake/user?pageNumber=$pageNr&elementPerPage=$elementPerPage",
+            headers: header))
+        .flatMap((response) => onResponseArrived(response))
+        .onErrorResume((error) => onError(error))
+        .flatMap((body) => Stream.fromIterable(jsonDecode(body)))
+        .map((s) => Earthquake.fromJson(s));
+  }
+
   Stream<Filter> getAllFilter() {
     return Stream.fromFuture(
         http.get(baseUrl + "filters",

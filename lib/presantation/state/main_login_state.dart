@@ -40,7 +40,6 @@ class MainLoginState extends State<MainLoginActivity> {
     return AppBar(
       title: Text('Earthquake'),
       actions: <Widget>[
-        IconButton(icon: Icon(Icons.search), onPressed: onSearchClicked),
         PopupMenuButton<Choice>(
           onSelected: _onMenuSelected,
           itemBuilder: (BuildContext context) {

@@ -72,7 +72,7 @@ class Properties {
   double gap;
   String magType;
   String type;
-  String title;
+  String title ;
 
   Properties(
       {this.mag,

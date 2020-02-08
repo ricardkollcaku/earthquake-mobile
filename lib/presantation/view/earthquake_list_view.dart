@@ -230,9 +230,7 @@ class EarthquakeListView {
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
             fontSize: 25,
-            color: earthquake.properties.mag > 4
-                ? MyColors.error
-                : MyColors.positive),
+            color: MyColors.getColor(earthquake.properties.mag)),
       );
     return Column(children: <Widget>[
       Image.asset(MyIcons.TSUNAMI, width: 25, height: 25,), Text(
@@ -240,9 +238,7 @@ class EarthquakeListView {
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
             fontSize: 20,
-            color: earthquake.properties.mag > 4
-                ? MyColors.error
-                : MyColors.positive),
+            color:  MyColors.getColor(earthquake.properties.mag)),
       )
     ],);
   }
