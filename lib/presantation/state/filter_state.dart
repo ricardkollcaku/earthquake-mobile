@@ -5,8 +5,10 @@ import 'package:earthquake/domain/util/util.dart';
 import 'package:earthquake/presantation/activity/filter_activity.dart';
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 
 import '../my_colors.dart';
@@ -17,17 +19,22 @@ class FilterState extends State<FilterActivity> {
 
   final _formKey = GlobalKey<FormState>();
   Filter _filter;
+  BuildContext myContext;
   List<Country> _countries;
   FilterService _filterService;
   Country _selectedCountry;
-
+  TextEditingController _filterName = new TextEditingController();
+  TextEditingController _magType = new TextEditingController();
+  bool _isEdit = false;
   FilterState({Filter filter}) {
     _filter = filter;
+
     initFields();
   }
 
   @override
   Widget build(BuildContext context) {
+    myContext = context;
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,
@@ -47,7 +54,21 @@ class FilterState extends State<FilterActivity> {
                     getLogo(),
                     SizedBox(height: 8.0),
                     getHintedTextFormField("Filter Name", false, setFilter,
-                        Icons.lock, getFilterValidator),
+                        Icons.title,
+                        getFilterValidator,
+                        TextInputType.text,
+                        _filterName,
+                        !_isEdit),
+                    SizedBox(height: 24.0),
+                    getHintedTextFormField(
+                        "minimum magnitude",
+                        false,
+                        setMagnitude,
+                        Icons.mobile_screen_share,
+                        getMinMagnitudeValidator,
+                        TextInputType.number,
+                        _magType,
+                        true),
                     SizedBox(height: 24.0),
                     getCountriesDropdown(),
 
@@ -79,7 +100,7 @@ class FilterState extends State<FilterActivity> {
         onDropDownSelect(value);
       },
       hint: Text("Select Country"),
-      searchHint: Text("Select 1 country"),
+      searchHint: Text("Select Country"),
       isExpanded: true,
       value: _selectedCountry,
       isCaseSensitiveSearch: false,
@@ -93,11 +114,15 @@ class FilterState extends State<FilterActivity> {
   }
 
   Widget getHintedTextFormField(String hint, bool obscure, Function onSaved,
-      IconData icon, Function(String) validator) {
+      IconData icon, Function(String) validator, TextInputType textInput,
+      TextEditingController textEditingController, bool enabled) {
     return new TextFormField(
       validator: validator,
       onSaved: onSaved,
+      enabled: enabled,
       autofocus: false,
+      keyboardType: textInput,
+      controller: textEditingController,
       obscureText: obscure,
       decoration: InputDecoration(
         labelText: hint,
@@ -113,7 +138,7 @@ class FilterState extends State<FilterActivity> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        onPressed: changeFilter,
+        onPressed: saveFilter,
         padding: EdgeInsets.all(12),
         color: MyColors.accent,
         child: Text('Save Filter', style: TextStyle(color: Colors.white)),
@@ -121,11 +146,26 @@ class FilterState extends State<FilterActivity> {
     );
   }
 
-  void changeFilter() {
+  void saveFilter() {
     UiHelper.setCurrentScaffoldContext(_buildContext);
+
+    Stream.value(_formKey.currentState.validate())
+        .where((b) => b)
+        .map((b) => saveState(b))
+        .flatMap(
+            (t) => _filterService.saveFilter(_filter))
+        .toList()
+        .asStream()
+        .listen(onFilterSaved);
+
   }
 
   void initFields() {
+    if (_filter != null) {
+      _filterName.text = _filter.name;
+      _magType.text = _filter.minMagnitude.toString();
+      _isEdit = true;
+    }
     if (_filter == null) _filter = new Filter();
     _filterService = new FilterService();
     _countries = new List();
@@ -137,11 +177,10 @@ class FilterState extends State<FilterActivity> {
     return _filter;
   }
 
-  onSuccess(bool user) {
-    Navigator.pop(_buildContext);
-  }
 
-  setFilter(String filter) {}
+  setFilter(String filter) {
+    _filter.name = filter;
+  }
 
   void getCountries() {
     _filterService.getCountries().toList().asStream().listen(addCountries);
@@ -150,6 +189,9 @@ class FilterState extends State<FilterActivity> {
   void addCountries(List<Country> event) {
     setState(() {
       _countries = event;
+      if (_filter.country != null)
+        _selectedCountry =
+        event.where((t) => t.country == _filter.country).toList()[0];
     });
   }
 
@@ -187,6 +229,8 @@ class FilterState extends State<FilterActivity> {
   void onDropDownSelect(Country country) {
     setState(() {
       _selectedCountry = country;
+      _filter.countryCode = country.countryCode;
+      _filter.country = country.country;
     });
   }
 
@@ -217,5 +261,20 @@ class FilterState extends State<FilterActivity> {
         ),
       ],
     ),);
+  }
+
+  void onFilterSaved(dynamic event) {
+    Navigator.of(myContext).pop(true);
+  }
+
+  String getMinMagnitudeValidator(String mag) {
+    if (!Util.getStringLengthValidator(mag, 1))
+      return "Filter should be greater than 0 char";
+    return null;
+  }
+
+
+  void setMagnitude(String string) {
+    _filter.minMagnitude = double.parse(string);
   }
 }

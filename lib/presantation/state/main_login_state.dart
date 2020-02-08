@@ -129,7 +129,12 @@ class MainLoginState extends State<MainLoginActivity> {
 
   void onFabPressed() {
     Navigator.of(_buildContext)
-        .pushNamed(FilterActivity.tag);
+        .pushNamed(FilterActivity.tag).asStream().listen(openFilterFragment);
+  }
+
+  void openFilterFragment(Object event) {
+    (_currentActiveFragment as FilterListFragment).filterListState.refreshState(
+        null);
   }
 }
 

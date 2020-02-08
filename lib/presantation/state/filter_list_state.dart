@@ -3,8 +3,6 @@ import 'package:earthquake/domain/services/filter_service.dart';
 import 'package:earthquake/presantation/fragment/filter_list_fragment.dart';
 import 'package:earthquake/presantation/view/filter_list_view.dart';
 import 'package:flutter/material.dart';
-import 'package:loadany/loadany_widget.dart';
-import 'package:rxdart/rxdart.dart';
 
 class FilterListState extends State<FilterListFragment> {
 
@@ -24,7 +22,7 @@ class FilterListState extends State<FilterListFragment> {
         itemCount: _filterList.length,
         itemBuilder: (BuildContext context, int index) {
           return _filterListView.buildItem(
-              _filterList[index], getConfirmDelete);
+              _filterList[index], getConfirmDelete,context,refreshState);
         }
     );
   }
@@ -83,7 +81,16 @@ class FilterListState extends State<FilterListFragment> {
 
 
   deleteFilter(Filter filter) {
-    _filterService.remove(filter).listen((s) => Navigator.of(context).pop());
+    _filterService.remove(filter).listen((s) =>
+        Navigator.of(context).pop(true));
   }
+
+ void refreshState(dynamic a) {
+    _filterList = new List();
+     getData(addRefreshing).asStream().listen(onData);
+  }
+
+
+
 
 }

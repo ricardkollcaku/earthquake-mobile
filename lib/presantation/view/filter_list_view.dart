@@ -1,4 +1,5 @@
 import 'package:earthquake/data/model/filter.dart';
+import 'package:earthquake/presantation/activity/filter_activity.dart';
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -7,9 +8,9 @@ import 'package:timeago/timeago.dart' as timeago;
 import '../my_colors.dart';
 
 class FilterListView {
-  Widget buildItem(Filter filter, getConfirmDelete) {
+  Widget buildItem(Filter filter, getConfirmDelete, BuildContext context, void Function(dynamic) refreshState) {
     return Dismissible(
-      child: Card(
+      child: GestureDetector(child: Card(
         child: ListTile(
           leading: _getCountryFlag(filter),
           subtitle: filter.country != null ? Text(filter.country) : Container(),
@@ -19,7 +20,7 @@ class FilterListView {
           ),
           trailing: _getMagnitude(filter),
         ),
-      ),
+      ), onTap: () => editFilter(filter, context,refreshState),),
       key: Key(filter.toString()),
       confirmDismiss: (DismissDirection direction) => getConfirmDelete(filter),
       background: Container(
@@ -68,4 +69,11 @@ class FilterListView {
         ? myString
         : '${myString.substring(0, cutoff)}...';
   }
+
+  editFilter(Filter filter, BuildContext context, void Function(dynamic) refreshState) {
+    Navigator.push(context, MaterialPageRoute(
+        builder: (BuildContext context) => FilterActivity(filter: filter,))).asStream().listen(refreshState);
+  }
+
+
 }

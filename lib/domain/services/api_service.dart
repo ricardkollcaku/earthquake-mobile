@@ -148,4 +148,15 @@ class ApiService {
         .map((s) => Country.fromJson(s));
   }
 
+  Stream<Filter> createFilter(Filter filter) {
+    return Stream.fromFuture(http.post(baseUrl + "filters",
+        body: (json.encode(filter.toJson())), headers: header))
+        .flatMap((response) => onResponseArrived(response))
+        .onErrorResume((error) => onError(error))
+        .flatMap((body) => Stream.fromIterable(jsonDecode(body)))
+        .map((s) => Filter.fromJson(s));
+  }
+
+
+
 }

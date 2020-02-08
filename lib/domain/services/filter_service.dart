@@ -25,4 +25,8 @@ class FilterService {
   Stream<Country> getCountries() {
     return _apiService.getAllCountries();
   }
+
+  Stream<Filter> saveFilter(Filter filter) {
+    return _apiService.createFilter(filter);
+  }
 }
