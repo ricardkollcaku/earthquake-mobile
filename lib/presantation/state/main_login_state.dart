@@ -26,7 +26,7 @@ class MainLoginState extends State<MainLoginActivity> {
   Widget build(BuildContext context) {
     _buildContext = context;
     return Scaffold(
-      appBar: getAppBar(),
+  //    appBar: getAppBar(),
       floatingActionButton: _fab,
       body: Builder(builder: (BuildContext context) {
         UiHelper.setCurrentScaffoldContext(context);

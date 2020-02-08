@@ -24,7 +24,6 @@ class EarthquakeState extends State<EarthquakeActivity> {
 
   @override
   Widget build(BuildContext context) {
-    final title = Text(_earthquake.properties.title);
     return Scaffold(
         backgroundColor: MyColors.white,
         body: Builder(builder: (BuildContext context) {
@@ -35,7 +34,7 @@ class EarthquakeState extends State<EarthquakeActivity> {
             slivers: <Widget>[
               SliverAppBar(
                 pinned: true,
-                expandedHeight: 250.0,
+                expandedHeight: 300.0,
                 backgroundColor: MyColors.getColor(_earthquake.properties.mag),
                 flexibleSpace: FlexibleSpaceBar(
                   background: getMap(context, _earthquake),
@@ -102,7 +101,7 @@ class EarthquakeState extends State<EarthquakeActivity> {
 
   Widget getMap(BuildContext context, Earthquake earthquake) {
     return Container(
-      height: 250,
+      height: 300,
       child: FlutterMap(
         options: new MapOptions(
           center: new LatLng(earthquake.geometry.coordinates[1],
@@ -138,46 +137,56 @@ class EarthquakeState extends State<EarthquakeActivity> {
     if (_widgets != null)
       return _widgets;
     _widgets = new List();
-    _widgets.add(getText(Icons.title, truncateWithEllipsis(25, "Country"),
+
+    _widgets.add(getText(Icons.title, truncateWithEllipsis(25, "Title"),
+        truncateWithEllipsis(35, _earthquake.properties.title.toString())));
+
+    _widgets.add(getText(Icons.place, truncateWithEllipsis(25, "Country"),
         truncateWithEllipsis(35, _earthquake.country.toString())));
 
-    _widgets.add(getText(Icons.title, truncateWithEllipsis(25, "Depth"),
-        truncateWithEllipsis(35, _earthquake.depth.toString() + " KM")));
-
-    _widgets.add(getText(Icons.title, truncateWithEllipsis(25, "Status"),
-        truncateWithEllipsis(35, _earthquake.properties.status.toString())));
-
-    _widgets.add(getText(Icons.title, truncateWithEllipsis(25, "Magnitude"),
-        truncateWithEllipsis(35, _earthquake.properties.mag.toString())));
+    _widgets.add(getText(Icons.gps_fixed, truncateWithEllipsis(25, "Place"),
+        truncateWithEllipsis(35, _earthquake.properties.place.toString())));
 
     _widgets.add(
-        getText(Icons.title, truncateWithEllipsis(25, "Magnitude Type"),
+        getText(Icons.directions_run, truncateWithEllipsis(25, "Magnitude"),
+            truncateWithEllipsis(35, _earthquake.properties.mag.toString())));
+
+    _widgets.add(
+        getText(Icons.settings, truncateWithEllipsis(25, "Magnitude Type"),
             truncateWithEllipsis(
                 35, _earthquake.properties.magType.toString())));
 
-    _widgets.add(getText(Icons.title, truncateWithEllipsis(25, "Type"),
+    _widgets.add(getText(Icons.broken_image, truncateWithEllipsis(25, "Depth"),
+        truncateWithEllipsis(35, _earthquake.depth.toString() + " KM")));
+
+    _widgets.add(getText(Icons.beenhere, truncateWithEllipsis(25, "Status"),
+        truncateWithEllipsis(35, _earthquake.properties.status.toString())));
+
+
+    _widgets.add(getText(Icons.merge_type, truncateWithEllipsis(25, "Type"),
         truncateWithEllipsis(35, _earthquake.properties.type.toString())));
 
-    _widgets.add(getText(Icons.title, truncateWithEllipsis(25, "Place"),
-        truncateWithEllipsis(35, _earthquake.properties.place.toString())));
 
-    _widgets.add(getText(Icons.title, truncateWithEllipsis(25, "Time"),
+    _widgets.add(getText(Icons.timer, truncateWithEllipsis(25, "Time"),
         truncateWithEllipsis(35, getTime())));
 
-    _widgets.add(getText(Icons.title, truncateWithEllipsis(25, "Tsunami"),
+    _widgets.add(getText(Icons.warning, truncateWithEllipsis(25, "Tsunami"),
         truncateWithEllipsis(
             35, _earthquake.properties.tsunami == 0 ? "No" : "Yes")));
 
 
-    _widgets.add(getText(Icons.title, truncateWithEllipsis(25, "Significant"),
+    _widgets.add(
+        getText(Icons.timeline, truncateWithEllipsis(25, "Significant"),
         truncateWithEllipsis(35, _earthquake.properties.sig.toString())));
 
     _widgets.add(
-        getText(Icons.title, truncateWithEllipsis(25, "Seismic stations"),
+        getText(
+            Icons.gps_not_fixed, truncateWithEllipsis(25, "Seismic stations"),
             truncateWithEllipsis(35, _earthquake.properties.nst.toString())));
 
     _widgets.add(
-        getText(Icons.title, truncateWithEllipsis(25, "Distance from station"),
+        getText(Icons.play_for_work,
+            truncateWithEllipsis(25, "Distance from station"),
             truncateWithEllipsis(35, _earthquake.properties.dmin.toString())));
 
 
@@ -220,17 +229,18 @@ class EarthquakeState extends State<EarthquakeActivity> {
           : CircleAvatar(child: Text(_earthquake.properties.mag
           .toString(), style: TextStyle(color: MyColors.white)),
         backgroundColor: MyColors.getColor(_earthquake.properties.mag),),
+      SizedBox(width: 5.0),
       RichText(text: TextSpan(
           style: new TextStyle(
             fontSize: 14.0,
           ),
           children: <TextSpan>[
-            TextSpan(text: "\t \t" + _earthquake.country,
+            TextSpan(text: _earthquake.country+"\n",
                 style: TextStyle(fontSize: 18.0,
                     color: silverCollapsed ? MyColors.white : MyColors.getColor(
                         _earthquake.properties.mag))),
             TextSpan(
-                text: "\n\t \t" + getTimeAgo(), style: TextStyle(fontSize: 10.0,
+                text: getTimeAgo(), style: TextStyle(fontSize: 12.0,
                 color: silverCollapsed ? MyColors.white : MyColors.getColor(
                     _earthquake.properties.mag)))
           ]),)
