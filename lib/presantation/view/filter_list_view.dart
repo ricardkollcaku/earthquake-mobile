@@ -3,7 +3,6 @@ import 'package:earthquake/presantation/activity/filter_activity.dart';
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 import '../my_colors.dart';
 
@@ -30,13 +29,7 @@ class FilterListView {
     );
   }
 
-  getTime(int time) {
-    return timeago.format(DateTime.fromMillisecondsSinceEpoch(time)) +
-        "\n" +
-        DateFormat.yMEd()
-            .add_jms()
-            .format(new DateTime.fromMillisecondsSinceEpoch(time));
-  }
+
 
   Widget _getCountryFlag(Filter filter) {
     if (filter.country == null)

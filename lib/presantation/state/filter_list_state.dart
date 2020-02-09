@@ -1,15 +1,18 @@
 import 'package:earthquake/data/model/filter.dart';
 import 'package:earthquake/domain/services/filter_service.dart';
 import 'package:earthquake/presantation/fragment/filter_list_fragment.dart';
+import 'package:earthquake/presantation/provider/app_bar_provider.dart';
 import 'package:earthquake/presantation/view/filter_list_view.dart';
 import 'package:flutter/material.dart';
+
+import '../my_colors.dart';
 
 class FilterListState extends State<FilterListFragment> {
 
   List<Filter> _filterList;
   FilterListView _filterListView;
   FilterService _filterService;
-
+  AppBarProvider _appBarProvider;
   FilterListState() {
     initField();
   }
@@ -18,6 +21,35 @@ class FilterListState extends State<FilterListFragment> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    _appBarProvider.context=context;
+
+
+    return CustomScrollView(
+      slivers: <Widget>[ SliverAppBar(
+        actions: _appBarProvider.getActions(),
+        pinned: true,
+        expandedHeight: 200.0,
+        backgroundColor: MyColors.accent,
+        flexibleSpace: FlexibleSpaceBar(
+          background: Image.network(
+            "https://img.freepik.com/free-vector/earthqauke-background-scene_1308-25987.jpg?size=626&ext=jpg",
+            fit: BoxFit.cover,),
+          title: Text("My Filters",),
+
+        ),
+      ), SliverList(
+          delegate: SliverChildBuilderDelegate(
+
+                (BuildContext context, int index) {
+              return _filterListView.buildItem(
+                  _filterList[index], getConfirmDelete, context, refreshState);
+            },
+            childCount: _filterList.length,
+          )),
+      ]
+      ,
+    );
+
     return ListView.builder(
         itemCount: _filterList.length,
         itemBuilder: (BuildContext context, int index) {
@@ -51,6 +83,7 @@ class FilterListState extends State<FilterListFragment> {
     _filterList = new List();
     _filterService = new FilterService();
     _filterListView = new FilterListView();
+    _appBarProvider = new AppBarProvider(context);
     getData(addRefreshing);
   }
 

@@ -1,13 +1,13 @@
 import 'package:earthquake/data/model/earthquake.dart';
 import 'package:earthquake/domain/util/util.dart';
 import 'package:earthquake/presantation/activity/earthquake_activity.dart';
+import 'package:earthquake/presantation/provider/map_provider.dart';
 import 'package:earthquake/presantation/my_colors.dart';
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 import '../ui_helper.dart';
 
@@ -109,19 +109,21 @@ class EarthquakeState extends State<EarthquakeActivity> {
           zoom: 10.0,
         ),
         layers: [
-          new TileLayerOptions(
-            urlTemplate: "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          TileLayerOptions(
+            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            subdomains: ['a', 'b', 'c'],
           ),
           new MarkerLayerOptions(
             markers: [
               new Marker(
-                width: 15.0,
-                height: 15.0,
+                width: 35.0,
+                height: 35.0,
                 point: new LatLng(earthquake.geometry.coordinates[1],
                     earthquake.geometry.coordinates[0]),
                 builder: (ctx) => Icon(
                   Icons.location_on,
-                  color: MyColors.error,
+                  size: 35,
+                  color: MyColors.getColor(earthquake.properties.mag),
                 ),
               ),
             ],
@@ -143,6 +145,8 @@ class EarthquakeState extends State<EarthquakeActivity> {
 
     _widgets.add(getText(Icons.place, truncateWithEllipsis(25, "Country"),
         truncateWithEllipsis(35, _earthquake.country.toString())));
+    _widgets.add(getText(Icons.mobile_screen_share, truncateWithEllipsis(25, "Distance"),
+        truncateWithEllipsis(35, MapProvider.getDistanceInKm(_earthquake.geometry))));
 
     _widgets.add(getText(Icons.gps_fixed, truncateWithEllipsis(25, "Place"),
         truncateWithEllipsis(35, _earthquake.properties.place.toString())));
@@ -167,8 +171,10 @@ class EarthquakeState extends State<EarthquakeActivity> {
         truncateWithEllipsis(35, _earthquake.properties.type.toString())));
 
 
-    _widgets.add(getText(Icons.timer, truncateWithEllipsis(25, "Time"),
-        truncateWithEllipsis(35, getTime())));
+    _widgets.add(getText(Icons.timer, truncateWithEllipsis(25, "Local Time"),
+        truncateWithEllipsis(35, Util.getLocalTime(_earthquake.properties.time))));
+
+
 
     _widgets.add(getText(Icons.warning, truncateWithEllipsis(25, "Tsunami"),
         truncateWithEllipsis(
@@ -240,7 +246,7 @@ class EarthquakeState extends State<EarthquakeActivity> {
                     color: silverCollapsed ? MyColors.white : MyColors.getColor(
                         _earthquake.properties.mag))),
             TextSpan(
-                text: getTimeAgo(), style: TextStyle(fontSize: 12.0,
+                text: Util.getLocalTimeAgo(_earthquake.properties.time), style: TextStyle(fontSize: 12.0,
                 color: silverCollapsed ? MyColors.white : MyColors.getColor(
                     _earthquake.properties.mag)))
           ]),)
@@ -252,16 +258,7 @@ class EarthquakeState extends State<EarthquakeActivity> {
             color: silverCollapsed ? MyColors.white : MyColors.getColor(
                 _earthquake.properties.mag)),)*/
 
-  getTimeAgo() {
-    return timeago.format(
-        DateTime.fromMillisecondsSinceEpoch(_earthquake.properties.time))
-    ;
-  }
 
-  getTime() {
-    return DateFormat.yMEd()
-        .add_jms()
-        .format(
-        new DateTime.fromMillisecondsSinceEpoch(_earthquake.properties.time));
-  }
+
+
 }

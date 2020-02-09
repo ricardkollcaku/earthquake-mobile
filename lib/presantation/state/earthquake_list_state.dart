@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:earthquake/data/model/earthquake.dart';
 import 'package:earthquake/domain/services/earthquake_service.dart';
 import 'package:earthquake/presantation/fragment/earthquake_list_fragment.dart';
+import 'package:earthquake/presantation/provider/app_bar_provider.dart';
 import 'package:earthquake/presantation/view/earthquake_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
 import 'package:loadany/loadany.dart';
 import 'package:rxdart/rxdart.dart';
@@ -21,7 +23,7 @@ class EarthquakeListState extends State<EarthquakeListFragment> {
   ScrollController _controller;
   EarthquakeService _earthquakeService;
   bool silverCollapsed = false;
-
+  AppBarProvider _appBarProvider;
   EarthquakeListState() {
     initField();
   }
@@ -30,7 +32,7 @@ class EarthquakeListState extends State<EarthquakeListFragment> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
+_appBarProvider.context=context;
 
     return LoadAny(
         onLoadMore: getLoadMore,
@@ -41,6 +43,7 @@ class EarthquakeListState extends State<EarthquakeListFragment> {
         loadMoreBuilder: _earthquakeListView.loadMoreBuilder,
         child: CustomScrollView(
           controller: _controller, slivers: <Widget>[ SliverAppBar(
+          actions: _appBarProvider.getActions(),
           pinned: true,
           expandedHeight: 300.0,
           backgroundColor: MyColors.accent,
@@ -51,6 +54,7 @@ class EarthquakeListState extends State<EarthquakeListFragment> {
           ),
         ), SliverList(
             delegate: SliverChildBuilderDelegate(
+
                   (BuildContext context, int index) {
                 return _earthquakeListView.buildItem(
                     _earthquakeList.elementAt(index));
@@ -68,16 +72,37 @@ class EarthquakeListState extends State<EarthquakeListFragment> {
       height: 300,
       child: FlutterMap(
         options: new MapOptions(
+          plugins: [
+            MarkerClusterPlugin(),
+          ],
           center: new LatLng(0, 0),
           zoom: 1,
         ),
         layers: [
-          new TileLayerOptions(
-            urlTemplate: "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          TileLayerOptions(
+            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            subdomains: ['a', 'b', 'c'],
           ),
-          new MarkerLayerOptions(
+          new MarkerClusterLayerOptions(
+            maxClusterRadius: 120,
+            size: Size(40, 40),
+            fitBoundsOptions: FitBoundsOptions(
+              padding: EdgeInsets.all(50),
+            ),
             markers: getMarkers(),
 
+            polygonOptions: PolygonOptions(
+                borderColor: Colors.blueAccent,
+                color: Colors.black12,
+                borderStrokeWidth: 3),
+
+            builder: (context, markers) {
+              return FloatingActionButton(heroTag: markers,
+                child: Text(markers.length.toString(),
+                  style: TextStyle(color: MyColors.white),),
+                onPressed: null,
+              );
+            },
           ),
         ],
       ),
@@ -89,14 +114,15 @@ LatLng center = new LatLng(0,0);
 
     return _earthquakeList.map((t) =>
     new Marker(
-      width: 15.0,
-      height: 15.0,
+      width: 35.0,
+      height: 35.0,
       point: new LatLng(t.geometry.coordinates[1],
           t.geometry.coordinates[0]),
       builder: (ctx) =>
-          Icon(
-            Icons.location_on,
-            color: MyColors.error,
+          IconButton(
+            icon: Icon(Icons.location_on, size: 35,),
+            onPressed: () => _earthquakeListView.openEarthquake(t),
+            color: MyColors.getColor(t.properties.mag),
           ),
     )).toList();
   }
@@ -106,6 +132,7 @@ LatLng center = new LatLng(0,0);
     _earthquakeListView = new EarthquakeListView(40, getLoadMore,context);
     _pageNumber = 0;
     _elementPerPage = 50;
+    _appBarProvider = new AppBarProvider(context);
     getData(addRefreshing);
 
 

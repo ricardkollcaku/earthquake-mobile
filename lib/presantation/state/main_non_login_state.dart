@@ -1,3 +1,4 @@
+import 'package:earthquake/data/model/choice.dart';
 import 'package:earthquake/presantation/activity/main_non_login_activity.dart';
 import 'package:earthquake/presantation/fragment/earthquake_list_fragment.dart';
 import 'package:earthquake/presantation/fragment/login_fragment.dart';
@@ -12,14 +13,13 @@ class MainNonLoginState extends State<MainNonLoginActivity> {
   Widget _currentActiveFragment;
 
   MainNonLoginState() {
-      initVariables();
+    initVariables();
   }
 
   @override
   Widget build(BuildContext context) {
     _buildContext = context;
     return Scaffold(
-      appBar: getAppBar(),
       body: Builder(builder: (BuildContext context) {
         UiHelper.setCurrentScaffoldContext(context);
         return _currentActiveFragment;
@@ -28,24 +28,7 @@ class MainNonLoginState extends State<MainNonLoginActivity> {
     );
   }
 
-  AppBar getAppBar() {
-    return AppBar(
-      title: Text('Earthquake(limited features)'),
-      actions: <Widget>[
-        IconButton(icon: Icon(Icons.search), onPressed: onSearchClicked),
-        PopupMenuButton<Choice>(
-          onSelected: _onMenuSelected,
-          itemBuilder: (BuildContext context) {
-            return _choices.map((Choice choice) {
-              return PopupMenuItem<Choice>(
-                  value: choice, child: Text(choice.prop1)
-              );
-            }).toList();
-          },
-        ),
-      ],
-    );
-  }
+
 
   BottomNavigationBar getBottomNavigationBar() {
     return BottomNavigationBar(
@@ -61,11 +44,6 @@ class MainNonLoginState extends State<MainNonLoginActivity> {
   void onSearchClicked() {
   }
 
-  void _onMenuSelected(Choice value) {
-  }
-  List<Choice> _choices = <Choice>[
-    Choice(prop1: 'Contact Us', prop2: Icons.phone),
-  ];
 
   List<Choice> _fragments = <Choice>[
     Choice(prop1: EarthquakeListFragment(), prop2: BottomNavigationBarItem(
@@ -89,9 +67,4 @@ class MainNonLoginState extends State<MainNonLoginActivity> {
 
 }
 
-class Choice {
-  Choice({this.prop1, this.prop2});
 
-  var prop1;
-  var prop2;
-}

@@ -1,3 +1,4 @@
+import 'package:earthquake/data/model/choice.dart';
 import 'package:earthquake/data/model/user.dart';
 import 'package:earthquake/domain/services/user_service.dart';
 import 'package:earthquake/presantation/activity/filter_activity.dart';
@@ -18,6 +19,7 @@ class MainLoginState extends State<MainLoginActivity> {
   Widget _currentActiveFragment;
   UserService _userService;
   Widget _fab;
+
   MainLoginState() {
     initVariables();
   }
@@ -26,7 +28,7 @@ class MainLoginState extends State<MainLoginActivity> {
   Widget build(BuildContext context) {
     _buildContext = context;
     return Scaffold(
-  //    appBar: getAppBar(),
+      //    appBar: getAppBar(),
       floatingActionButton: _fab,
       body: Builder(builder: (BuildContext context) {
         UiHelper.setCurrentScaffoldContext(context);
@@ -36,23 +38,6 @@ class MainLoginState extends State<MainLoginActivity> {
     );
   }
 
-  AppBar getAppBar() {
-    return AppBar(
-      title: Text('Earthquake'),
-      actions: <Widget>[
-        PopupMenuButton<Choice>(
-          onSelected: _onMenuSelected,
-          itemBuilder: (BuildContext context) {
-            return _choices.map((Choice choice) {
-              return PopupMenuItem<Choice>(
-                  value: choice, child: Text(choice.prop1)
-              );
-            }).toList();
-          },
-        ),
-      ],
-    );
-  }
 
   BottomNavigationBar getBottomNavigationBar() {
     return BottomNavigationBar(
@@ -68,15 +53,6 @@ class MainLoginState extends State<MainLoginActivity> {
   void onSearchClicked() {
   }
 
-  void _onMenuSelected(Choice value) {
-    if (value == _choices[1])
-      logout();
-  }
-
-  List<Choice> _choices = <Choice>[
-    Choice(prop1: 'Contact Us', prop2: Icons.phone),
-    Choice(prop1: 'Logout', prop2: Icons.exit_to_app),
-  ];
 
   List<Choice> _fragments = <Choice>[
     Choice(prop1: EarthquakeListFragment(), prop2: BottomNavigationBarItem(
@@ -137,10 +113,4 @@ class MainLoginState extends State<MainLoginActivity> {
   }
 }
 
-class Choice {
-  Choice({this.prop1, this.prop2});
 
-  var prop1;
-  var prop2;
-
-}

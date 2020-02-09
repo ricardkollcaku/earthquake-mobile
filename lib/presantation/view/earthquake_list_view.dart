@@ -1,13 +1,15 @@
 import 'package:earthquake/data/model/earthquake.dart';
+import 'package:earthquake/domain/util/util.dart';
 import 'package:earthquake/presantation/activity/earthquake_activity.dart';
 import 'package:earthquake/presantation/activity/filter_activity.dart';
+import 'package:earthquake/presantation/provider/map_provider.dart';
 import 'package:earthquake/presantation/my_colors.dart';
 import 'package:earthquake/presantation/my_icons.dart';
+import 'package:earthquake/presantation/ui_helper.dart';
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loadany/loadany.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 
 class EarthquakeListView {
@@ -136,7 +138,7 @@ class EarthquakeListView {
               children: <Widget>[
                 Expanded(
                   flex: 3,
-                  child: _getCountryFlag(earthquake),
+                  child: UiHelper.getCountryFlag(earthquake.countryCode),
                 ),
                 Expanded(
                   flex: 12,
@@ -156,7 +158,7 @@ class EarthquakeListView {
                                 width: 3,
                               ),
                               Text(truncateWithEllipsis(
-                                  35, earthquake.properties.place),
+                                  35, MapProvider.getDistanceInKm(earthquake.geometry)),
                                 overflow: TextOverflow.ellipsis,)
                             ],
                           ),
@@ -169,7 +171,7 @@ class EarthquakeListView {
                               SizedBox(
                                 width: 3,
                               ),
-                              Text(getTime(earthquake.properties.time))
+                              Text(Util.getLocalTimeAgoAndTime(earthquake.properties.time))
                             ],
                           ),
                         ],
@@ -204,22 +206,9 @@ class EarthquakeListView {
     ),);
   }
 
-  getTime(int time) {
-    return timeago.format(DateTime.fromMillisecondsSinceEpoch(time)) + "\n" +
-        DateFormat.yMEd()
-            .add_jms()
-            .format(new DateTime.fromMillisecondsSinceEpoch(time));
-  }
 
-  Widget _getCountryFlag(Earthquake earthquake) {
-    if (earthquake.countryCode == null)
-      return Container();
-    try {
-      return Flags.getMiniFlag(earthquake.countryCode, null, 50);
-    } catch (e) {
-      return Container();
-    }
-  }
+
+
 
   Widget _getMagnitude(Earthquake earthquake) {
     if (earthquake.properties.mag == null)

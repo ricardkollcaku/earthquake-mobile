@@ -1,4 +1,6 @@
+import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 class UiHelper {
@@ -52,9 +54,33 @@ class UiHelper {
   static String formatTime(TimeOfDay t) {
     final now = new DateTime.now();
     DateTime dateTime =
-        new DateTime(now.year, now.month, now.day, t.hour, t.minute);
+    new DateTime(now.year, now.month, now.day, t.hour, t.minute);
     return DateFormat("HH:mm").format(dateTime);
   }
 
+  static Widget getCountryFlag(String countryCode) {
+    if (countryCode == null)
+      return Container();
+    try {
+      return Flags.getMiniFlag(countryCode, null, 50);
+    } catch (e) {
+      return Container();
+    }
+  }
 
+  static Widget getCountryFlagMax(String countryCode) {
+    if (countryCode == null)
+      return Container();
+    try {
+      String assetName = 'packages/flag/res/svg1/' + countryCode + '.svg';
+      Widget svg = new SvgPicture.asset(
+        assetName,
+        semanticsLabel: countryCode,
+        fit: BoxFit.cover,
+      );
+      return svg;
+    } catch (e) {
+      return Container();
+    }
+  }
 }

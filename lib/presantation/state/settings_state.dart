@@ -2,11 +2,14 @@ import 'package:earthquake/data/model/user.dart';
 import 'package:earthquake/domain/services/user_service.dart';
 import 'package:earthquake/presantation/activity/change_password_activity.dart';
 import 'package:earthquake/presantation/fragment/settings_fragment.dart';
+import 'package:earthquake/presantation/provider/app_bar_provider.dart';
 import 'package:flutter/material.dart';
+
+import '../my_colors.dart';
 
 class SettingsState extends State<SettingsFragment> {
   UserService _userService;
-
+  AppBarProvider _appBarProvider;
 
   SettingsState() {
     initFields();
@@ -15,14 +18,39 @@ class SettingsState extends State<SettingsFragment> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return ListView(
-      children: [getChangePassword(), getNotification()],
+
+    _appBarProvider.context = context;
+
+    return CustomScrollView(
+      slivers: <Widget>[ SliverAppBar(
+        actions: _appBarProvider.getActions(),
+        pinned: true,
+        expandedHeight: 200.0,
+        backgroundColor: MyColors.accent,
+        flexibleSpace: FlexibleSpaceBar(
+          background: Image.network(
+            "https://static.makeuseof.com/wp-content/uploads/2018/01/android-settings-670x335.jpg",
+            fit: BoxFit.cover,),
+          title: Text("My Settings",),
+
+        ),
+      ), SliverList(
+          delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                return getSettingsWidget(index);
+              },
+              childCount: 2
+          )),
+      ]
+      ,
     );
   }
 
 
   void initFields() {
     _userService = new UserService();
+    _appBarProvider = new AppBarProvider(context);
+
   }
 
 
@@ -60,5 +88,12 @@ class SettingsState extends State<SettingsFragment> {
     setState(() {
       UserService.user = user;
     });
+  }
+
+  Widget getSettingsWidget(int index) {
+    if (index == 0)
+      return getChangePassword();
+    if (index == 1)
+      return getNotification();
   }
 }
