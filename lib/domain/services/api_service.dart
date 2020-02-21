@@ -14,7 +14,7 @@ import 'package:rxdart/rxdart.dart';
 
 class ApiService {
 //  String baseUrl = "http://10.0.2.2:8080/api/v1/";
-  String baseUrl = "http://192.168.0.15:8080/api/v1/";
+  String baseUrl = "http://80.78.79.120:9501/api/v1/";
   //String baseUrl = "http://[2a02:8108:8f80:2ad6:30b5:aaea:db47:4b04]:8080/api/v1/";
 
   Map<String, String> header;
@@ -51,7 +51,7 @@ class ApiService {
     if (response.statusCode == 200) return Stream.value(response.body);
     if(response.statusCode==401){
       UiHelper.showError("User is unauthorized");
-      return Stream.error("User is unauthorized");
+      return Stream.error(401);
     }
     UiHelper.showError(response.headers["error"]);
     return Stream.error("error");

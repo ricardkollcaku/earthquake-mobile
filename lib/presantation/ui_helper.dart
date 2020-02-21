@@ -59,6 +59,8 @@ class UiHelper {
   }
 
   static Widget getCountryFlag(String countryCode) {
+    if(countryCode=="World")
+      return Icon(Icons.terrain); //TODO put word icon
     if (countryCode == null)
       return Container();
     try {

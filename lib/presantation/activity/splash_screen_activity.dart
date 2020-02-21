@@ -41,16 +41,18 @@ class SplashScreenActivity extends StatelessWidget {
     _screenService.saveCurrentUserOnShp(isLogin) :
     Stream.value(false))
         .map((bool) => redirectToActivity(bool))
+        .onErrorResume((e) => onError(e))
         .listen(onData);
   }
 
-  redirectToActivity(bool isLogin) {
+  bool redirectToActivity(bool isLogin) {
     if (isLogin)
       Navigator.of(_buildContext)
           .pushReplacementNamed(MainLoginActivity.tag);
     else
       Navigator.of(_buildContext)
           .pushReplacementNamed(MainNonLoginActivity.tag);
+    return isLogin;
   }
 
   void onData(event) {}
@@ -58,6 +60,13 @@ class SplashScreenActivity extends StatelessWidget {
   SharedPreferences initUtils(SharedPreferences t) {
     MapProvider.initMapProvider();
     return t;
+  }
+
+  Stream<bool> onError(e) {
+    if (e == 401)
+      return _screenService.logoutUser()
+          .map((bool) => redirectToActivity(bool));
+    return Stream.empty();
   }
 
 

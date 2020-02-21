@@ -60,4 +60,8 @@ class SplashScreenService {
   String setToken(String token) {
     return _apiService.setToken(token);
   }
+
+  Stream<bool> logoutUser(){
+    return _userService.logout();
+  }
 }
