@@ -1,11 +1,11 @@
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 class UiHelper {
   static BuildContext currentScaffoldContext;
-
   static void setCurrentScaffoldContext(BuildContext context) {
     currentScaffoldContext = context;
   }
@@ -85,4 +85,25 @@ class UiHelper {
       return Container();
     }
   }
+
+
+  static TileLayerOptions getMapTile(){
+  return  TileLayerOptions(
+      urlTemplate: "https://api.tiles.mapbox.com/v4/"
+          "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
+      additionalOptions: {
+        'accessToken':
+        'pk.eyJ1IjoiZGFma3VhbHRpbiIsImEiOiJjazhpeGY1NHMwOHoyM2txbHgyajlleGgyIn0.nt_pd-RsSMAfR6g-LKgC3A',
+        'id': 'mapbox.streets',
+      },
+
+      //    urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      //   subdomains: ['a', 'b', 'c'],
+      //  urlTemplate: 'http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg',
+    );
+
+  }
+
+
+
 }

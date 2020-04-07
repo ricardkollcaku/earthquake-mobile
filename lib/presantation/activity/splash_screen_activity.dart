@@ -38,11 +38,20 @@ class SplashScreenActivity extends StatelessWidget {
         .flatMap((shp) => _screenService.isLogin())
         .flatMap((isLogin) =>
     isLogin ?
-    _screenService.saveCurrentUserOnShp(isLogin) :
-    Stream.value(false))
+    doOnLogin(isLogin) :
+    doOnNotLogin(isLogin))
         .map((bool) => redirectToActivity(bool))
         .onErrorResume((e) => onError(e))
         .listen(onData);
+  }
+
+  Stream<bool> doOnLogin(bool isLogin){
+    return _screenService.saveCurrentUserOnShp(isLogin);
+
+  }
+
+  Stream<bool> doOnNotLogin(bool isLogin){
+    return Stream.value(false);
   }
 
   bool redirectToActivity(bool isLogin) {
@@ -68,6 +77,7 @@ class SplashScreenActivity extends StatelessWidget {
           .map((bool) => redirectToActivity(bool));
     return Stream.empty();
   }
+
 
 
 }

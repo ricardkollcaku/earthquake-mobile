@@ -1,5 +1,7 @@
 import 'package:device_info/device_info.dart';
+import 'package:earthquake/data/model/country.dart';
 import 'package:earthquake/domain/services/api_service.dart';
+import 'package:earthquake/domain/services/filter_service.dart';
 import 'package:earthquake/domain/services/shared_prefs_service.dart';
 import 'package:earthquake/domain/services/user_service.dart';
 import 'package:rxdart/rxdart.dart';
@@ -64,4 +66,6 @@ class SplashScreenService {
   Stream<bool> logoutUser(){
     return _userService.logout();
   }
+
+
 }

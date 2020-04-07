@@ -83,21 +83,6 @@ class EarthquakeState extends State<EarthquakeActivity> {
     );
   }
 
-  Widget _getCountryFlag(String countryCode) {
-    if (countryCode == null)
-      return Container(
-        width: 15,
-        height: 15,
-      );
-    try {
-      return Flags.getMiniFlag(countryCode, null, 30);
-    } catch (e) {
-      return Container(
-        width: 15,
-        height: 15,
-      );
-    }
-  }
 
   Widget getMap(BuildContext context, Earthquake earthquake) {
     return Container(
@@ -106,13 +91,11 @@ class EarthquakeState extends State<EarthquakeActivity> {
         options: new MapOptions(
           center: new LatLng(earthquake.geometry.coordinates[1],
               earthquake.geometry.coordinates[0]),
-          zoom: 10.0,
+          zoom: 8.0,
         ),
         layers: [
-          TileLayerOptions(
-            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            subdomains: ['a', 'b', 'c'],
-          ),
+          UiHelper.getMapTile(),
+
           new MarkerLayerOptions(
             markers: [
               new Marker(

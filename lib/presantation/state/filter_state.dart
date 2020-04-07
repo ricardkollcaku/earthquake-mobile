@@ -36,36 +36,34 @@ class FilterState extends State<FilterActivity> {
   @override
   Widget build(BuildContext context) {
     myContext = context;
-    return Scaffold(
-
-        body: Builder(builder: (BuildContext context) {
-          _buildContext = context;
-          UiHelper.setCurrentScaffoldContext(_buildContext);
-          return CustomScrollView(
-            slivers: <Widget>[ SliverAppBar(
-              pinned: true,
-              expandedHeight: 200.0,
-              backgroundColor: MyColors.accent,
-              flexibleSpace: FlexibleSpaceBar(
-                background: UiHelper.getCountryFlagMax(_filter.countryCode),
-                title: Text(
-                  _filter.name == null ? "Add Filter" : (_filter.name +
-                      " Edit Filter"),),
-
+    return Scaffold(body: Builder(builder: (BuildContext context) {
+      _buildContext = context;
+      UiHelper.setCurrentScaffoldContext(_buildContext);
+      return CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            pinned: true,
+            expandedHeight: 200.0,
+            backgroundColor: MyColors.accent,
+            flexibleSpace: FlexibleSpaceBar(
+              background: UiHelper.getCountryFlagMax(_filter.countryCode),
+              title: Text(
+                _filter.name == null
+                    ? "Add Filter"
+                    : (_filter.name + " Edit Filter"),
               ),
-            ), SliverList(
-                delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                      return getFilterForm();
-                    },
-                    childCount: 1
-                )),
-            ]
-            ,
-          );;
-        }));
+            ),
+          ),
+          SliverList(
+              delegate:
+                  SliverChildBuilderDelegate((BuildContext context, int index) {
+            return getFilterForm();
+          }, childCount: 1)),
+        ],
+      );
+      ;
+    }));
   }
-
 
   Widget getLogo() {
     return Container();
@@ -95,9 +93,15 @@ class FilterState extends State<FilterActivity> {
     return null;
   }
 
-  Widget getHintedTextFormField(String hint, bool obscure, Function onSaved,
-      IconData icon, Function(String) validator, TextInputType textInput,
-      TextEditingController textEditingController, bool enabled) {
+  Widget getHintedTextFormField(
+      String hint,
+      bool obscure,
+      Function onSaved,
+      IconData icon,
+      Function(String) validator,
+      TextInputType textInput,
+      TextEditingController textEditingController,
+      bool enabled) {
     return new TextFormField(
       validator: validator,
       onSaved: onSaved,
@@ -134,12 +138,10 @@ class FilterState extends State<FilterActivity> {
     Stream.value(_formKey.currentState.validate())
         .where((b) => b)
         .map((b) => saveState(b))
-        .flatMap(
-            (t) => _filterService.saveFilter(_filter))
+        .flatMap((t) => _filterService.saveFilter(_filter))
         .toList()
         .asStream()
         .listen(onFilterSaved);
-
   }
 
   void initFields() {
@@ -163,19 +165,21 @@ class FilterState extends State<FilterActivity> {
     return _filter;
   }
 
-
   setFilter(String filter) {
     _filter.name = filter;
   }
 
   void getCountries() {
-    _filterService.getCountries().toList().asStream().flatMap((t) =>
-        Stream.fromFuture(setTest(t))).listen(addCountries);
+    _filterService
+        .getCountries()
+        .toList()
+        .asStream()
+        .flatMap((t) => Stream.fromFuture(setTest(t)))
+        .listen(addCountries);
   }
 
   Future<List<Country>> setTest(List<Country> country) async {
-    _dropDownCountries =
-    await Future.value(
+    _dropDownCountries = await Future.value(
         country.map<DropdownMenuItem<Country>>(createDropDown).toList());
     return country;
   }
@@ -185,7 +189,7 @@ class FilterState extends State<FilterActivity> {
       _countries = event;
       if (_filter.country != null)
         _selectedCountry =
-        event.where((t) => t.country == _filter.country).toList()[0];
+            event.where((t) => t.country == _filter.country).toList()[0];
     });
   }
 
@@ -212,9 +216,9 @@ class FilterState extends State<FilterActivity> {
           title: Text(e.country),
           trailing: e.countryCode == null
               ? Container(
-            width: 15,
-            height: 15,
-          )
+                  width: 15,
+                  height: 15,
+                )
               : Text(e.countryCode),
         ),
         value: e);
@@ -224,37 +228,9 @@ class FilterState extends State<FilterActivity> {
     setState(() {
       _selectedCountry = country;
       _filter.countryCode = country.countryCode;
+      _filter.countryKey = country.key;
       _filter.country = country.country;
     });
-  }
-
-
-  Widget getMap(BuildContext context) {
-    return Container(height: 300, child: FlutterMap(
-      options: new MapOptions(
-        center: new LatLng(51.5, -0.09),
-        zoom: 13.0,
-      ),
-      layers: [
-        new TileLayerOptions(
-          urlTemplate: "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
-
-        ),
-        new MarkerLayerOptions(
-          markers: [
-            new Marker(
-              width: 80.0,
-              height: 80.0,
-              point: new LatLng(51.5, -0.09),
-              builder: (ctx) =>
-              new Container(
-                //,
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),);
   }
 
   void onFilterSaved(dynamic event) {
@@ -266,7 +242,6 @@ class FilterState extends State<FilterActivity> {
       return "Filter should be greater than 0 char";
     return null;
   }
-
 
   void setMagnitude(String string) {
     _filter.minMagnitude = double.parse(string);
@@ -318,10 +293,8 @@ class FilterState extends State<FilterActivity> {
                   true),
               SizedBox(height: 24.0),
               getCountriesDropdown(),
-
               SizedBox(height: 24.0),
               getNotification(),
-
               SizedBox(height: 24.0),
               getSaveFilterButton(),
             ],

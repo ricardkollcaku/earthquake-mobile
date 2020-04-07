@@ -13,6 +13,7 @@ import 'package:loadany/loadany.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../my_colors.dart';
+import '../ui_helper.dart';
 
 class EarthquakeListState extends State<EarthquakeListFragment> {
 
@@ -79,10 +80,8 @@ _appBarProvider.context=context;
           zoom: 1,
         ),
         layers: [
-          TileLayerOptions(
-            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            subdomains: ['a', 'b', 'c'],
-          ),
+          UiHelper.getMapTile(),
+
           new MarkerClusterLayerOptions(
             maxClusterRadius: 120,
             size: Size(40, 40),

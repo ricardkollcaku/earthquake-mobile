@@ -29,7 +29,7 @@ dependencies:
   device_info: ^0.4.1+4
   lazy_load_scrollview: ^1.0.1
   loadany: ^0.1.2
-  flag: ^1.0.2
+  flag: ^1.0.3
   country_pickers: ^1.1.0
   timeago: ^2.0.25
   flutter_map: ^0.8.2
