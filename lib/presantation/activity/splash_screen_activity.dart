@@ -46,7 +46,7 @@ class SplashScreenActivity extends StatelessWidget {
   }
 
   Stream<bool> doOnLogin(bool isLogin){
-    return _screenService.saveCurrentUserOnShp(isLogin);
+    return _screenService.saveCurrentUserOnShp(isLogin).flatMap((bool)=>registerFirebaseToken(bool));
 
   }
 
@@ -76,6 +76,11 @@ class SplashScreenActivity extends StatelessWidget {
       return _screenService.logoutUser()
           .map((bool) => redirectToActivity(bool));
     return Stream.empty();
+  }
+
+  Stream<bool>registerFirebaseToken(bool b) {
+    return _screenService.registerFirebaseToken()
+        .map((s)=>b);
   }
 
 

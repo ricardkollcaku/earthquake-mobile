@@ -68,4 +68,11 @@ class UserService {
   Stream<User> setUser(User user) {
     return _sharedPrefsService.setUser(user);
   }
+
+
+  Stream<String> setFirebaseToken(String token){
+    print(token);
+    return _apiService.setFirebaseToken(token);
+  }
+
 }

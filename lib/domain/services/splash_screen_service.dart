@@ -2,6 +2,7 @@ import 'package:device_info/device_info.dart';
 import 'package:earthquake/data/model/country.dart';
 import 'package:earthquake/domain/services/api_service.dart';
 import 'package:earthquake/domain/services/filter_service.dart';
+import 'package:earthquake/domain/services/firebase_service.dart';
 import 'package:earthquake/domain/services/shared_prefs_service.dart';
 import 'package:earthquake/domain/services/user_service.dart';
 import 'package:rxdart/rxdart.dart';
@@ -12,12 +13,13 @@ class SplashScreenService {
   UserService _userService;
   DeviceInfoPlugin _deviceInfo;
   ApiService _apiService;
-
+FirebaseService _firebaseService;
   SplashScreenService() {
     _sharedPrefsService = new SharedPrefsService();
     _userService = new UserService();
     _deviceInfo = new DeviceInfoPlugin();
     _apiService = new ApiService();
+    _firebaseService = new FirebaseService();
   }
 
   Stream<SharedPreferences> initLocalSharedPrefs() {
@@ -66,6 +68,10 @@ class SplashScreenService {
   Stream<bool> logoutUser(){
     return _userService.logout();
   }
+
+ Stream<String> registerFirebaseToken() {
+    return _firebaseService.registerToken();
+ }
 
 
 }

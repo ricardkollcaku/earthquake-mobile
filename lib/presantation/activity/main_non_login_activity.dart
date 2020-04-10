@@ -1,3 +1,4 @@
+import 'package:earthquake/domain/services/firebase_service.dart';
 import 'package:earthquake/presantation/state/main_non_login_state.dart';
 import 'package:flutter/cupertino.dart';
 

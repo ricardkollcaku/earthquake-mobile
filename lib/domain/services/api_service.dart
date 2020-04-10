@@ -85,6 +85,12 @@ class ApiService {
         .onErrorResume((error) => onError(error));
   }
 
+
+  Stream<String> setFirebaseToken(String s) {
+    return Stream.fromFuture(http.put(baseUrl + "users/token/$s",headers: header))
+        .flatMap((response) => onResponseArrived(response))
+        .onErrorResume((error) => onError(error));
+  }
   Stream<User> changePassword(ChangePassword changePassword) {
     return Stream.fromFuture(http.put(baseUrl + "users/changePassword",
         body: (json.encode(changePassword.toJson())), headers: header))
