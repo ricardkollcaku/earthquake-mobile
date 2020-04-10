@@ -27,9 +27,11 @@ class FilterState extends State<FilterActivity> {
   TextEditingController _filterName = new TextEditingController();
   TextEditingController _magType = new TextEditingController();
   bool _isEdit = false;
+  bool _actAsDialog=false;
 
-  FilterState({Filter filter}) {
+  FilterState({Filter filter,bool actAsDialog=false}) {
     _filter = filter;
+    _actAsDialog = actAsDialog;
     initFields();
   }
 
@@ -42,6 +44,7 @@ class FilterState extends State<FilterActivity> {
       return CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
+            iconTheme: IconThemeData(color: Colors.white, size: 10.0),
             pinned: true,
             expandedHeight: 200.0,
             backgroundColor: MyColors.accent,
@@ -133,6 +136,12 @@ class FilterState extends State<FilterActivity> {
   }
 
   void saveFilter() {
+    if(_actAsDialog){
+      if(_formKey.currentState.validate()) {
+        Navigator.pop(context,saveState(true));
+      }
+      return;
+    }
     UiHelper.setCurrentScaffoldContext(_buildContext);
 
     Stream.value(_formKey.currentState.validate())
@@ -257,6 +266,7 @@ class FilterState extends State<FilterActivity> {
             children: <Widget>[
               getLogo(),
               SizedBox(height: 8.0),
+              getIfActAsDialog(),
               getHintedTextFormField(
                   "Filter Name",
                   false,
@@ -289,4 +299,10 @@ class FilterState extends State<FilterActivity> {
       ),
     );
   }
+
+ Widget getIfActAsDialog() {
+    if(_actAsDialog)
+  return Column(children: <Widget>[Text("You are not logged in as a user, so filter will be limited for you, Login or register to have full application and filter features, Login to have all earthquakes access and multiple filters"),SizedBox(height: 8.0),],)    ;
+      return Container();
+ }
 }

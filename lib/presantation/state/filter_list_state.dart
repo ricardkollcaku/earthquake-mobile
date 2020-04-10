@@ -25,7 +25,9 @@ class FilterListState extends State<FilterListFragment> {
 
 
     return CustomScrollView(
+
       slivers: <Widget>[ SliverAppBar(
+        iconTheme: IconThemeData(color: Colors.white, size: 10.0),
         actions: _appBarProvider.getActions(),
         pinned: true,
         expandedHeight: 200.0,

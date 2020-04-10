@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:earthquake/data/model/earthquake.dart';
+import 'package:earthquake/data/model/filter.dart';
 import 'package:earthquake/domain/services/earthquake_service.dart';
+import 'package:earthquake/presantation/activity/filter_activity.dart';
 import 'package:earthquake/presantation/fragment/earthquake_list_fragment.dart';
 import 'package:earthquake/presantation/provider/app_bar_provider.dart';
 import 'package:earthquake/presantation/view/earthquake_list_view.dart';
@@ -25,6 +27,9 @@ class EarthquakeListState extends State<EarthquakeListFragment> {
   EarthquakeService _earthquakeService;
   bool silverCollapsed = false;
   AppBarProvider _appBarProvider;
+  bool _isLogin=true;
+  Filter _localNotLoginUserFilter;
+
   EarthquakeListState() {
     initField();
   }
@@ -44,14 +49,14 @@ _appBarProvider.context=context;
         loadMoreBuilder: _earthquakeListView.loadMoreBuilder,
         child: CustomScrollView(
           controller: _controller, slivers: <Widget>[ SliverAppBar(
-          actions: _appBarProvider.getActions(),
+          actions: _isLogin?_appBarProvider.getActions():_appBarProvider.getNonLoginActions(onLocalSearchClicked),
           pinned: true,
+          iconTheme: IconThemeData(color: Colors.white, size: 10.0),
           expandedHeight: 300.0,
           backgroundColor: MyColors.accent,
           flexibleSpace: FlexibleSpaceBar(
             background: getMap(context),
             title: Text("Earthquake",),
-
           ),
         ), SliverList(
             delegate: SliverChildBuilderDelegate(
@@ -67,7 +72,14 @@ _appBarProvider.context=context;
         )
     );
   }
-
+onLocalSearchClicked() async{
+  _localNotLoginUserFilter = await Navigator.push(
+    context,
+    // Create the SelectionScreen in the next step.
+    MaterialPageRoute(builder: (context) => FilterActivity(actAsDialog: true,filter: _localNotLoginUserFilter,)),
+  );
+  await getRefresh();
+}
   Widget getMap(BuildContext context) {
     return Container(
       height: 300,
@@ -128,6 +140,7 @@ LatLng center = new LatLng(0,0);
   void initField() {
     _earthquakeList = new Set();
     _earthquakeService = new EarthquakeService();
+    _earthquakeService.isLogin().listen((b)=>_isLogin=b);
     _earthquakeListView = new EarthquakeListView(40, getLoadMore,context);
     _pageNumber = 0;
     _elementPerPage = 50;
@@ -168,7 +181,7 @@ LatLng center = new LatLng(0,0);
   }
 
   Future<void> getData(Function function) {
-    return _earthquakeService.getAllEarthquakes(_pageNumber, _elementPerPage)
+    return _earthquakeService.getAllEarthquakes(_pageNumber, _elementPerPage,filter: _localNotLoginUserFilter)
         .doOnError(doOnError)
         .toList()
         .asStream()

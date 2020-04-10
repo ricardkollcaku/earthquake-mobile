@@ -23,6 +23,7 @@ class SettingsState extends State<SettingsFragment> {
 
     return CustomScrollView(
       slivers: <Widget>[ SliverAppBar(
+        iconTheme: IconThemeData(color: Colors.white, size: 10.0),
         actions: _appBarProvider.getActions(),
         pinned: true,
         expandedHeight: 200.0,
@@ -69,7 +70,7 @@ class SettingsState extends State<SettingsFragment> {
       child: SwitchListTile(
         value: UserService.user.fullDatabaseSearch,
         title: Text("Search all Earthquakes"),
-        subtitle: Text("When is not activated it searches for last 100 days , When you activate it search for all earthquakes but this reduse app performance"),
+        subtitle: Text("When is not activated it searches for last 100 days , When you activate it search for all earthquakes but this reduce app performance"),
         onChanged: setSearchInAllDb,
       ),
     );

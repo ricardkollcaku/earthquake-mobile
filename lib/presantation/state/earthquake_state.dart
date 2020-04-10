@@ -33,6 +33,7 @@ class EarthquakeState extends State<EarthquakeActivity> {
             controller: _controller,
             slivers: <Widget>[
               SliverAppBar(
+                iconTheme: IconThemeData(color: Colors.white, size: 10.0),
                 pinned: true,
                 expandedHeight: 300.0,
                 backgroundColor: MyColors.getColor(_earthquake.properties.mag),

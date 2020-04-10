@@ -124,10 +124,10 @@ class ApiService {
         .map((body) => User.fromJson(jsonDecode(body)));
   }
 
-  Stream<Earthquake> getAllEarthquakes(int pageNr, int elementPerPage) {
+  Stream<Earthquake> getAllEarthquakes(int pageNr, int elementPerPage,{double mag ,int countryKey}) {
     return Stream.fromFuture(
         http.get(baseUrl +
-            "earthquake/all?pageNumber=$pageNr&elementPerPage=$elementPerPage",
+            "earthquake/all?pageNumber=$pageNr&elementPerPage=$elementPerPage"+(mag!=null?"&mag=$mag":"")+(countryKey!=null?"&countryKey=$countryKey":""),
             headers: header))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error))

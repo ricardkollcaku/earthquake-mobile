@@ -1,6 +1,7 @@
 import 'package:earthquake/data/model/choice.dart';
 import 'package:earthquake/domain/services/user_service.dart';
 import 'package:earthquake/presantation/activity/main_non_login_activity.dart';
+import 'package:earthquake/presantation/my_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +27,22 @@ class AppBarProvider {
 
   List<Widget> getActions() {
     return <Widget>[
+      PopupMenuButton<Choice>(
+        onSelected: _onMenuSelected,
+        itemBuilder: (BuildContext context) {
+          return (UserService.user == null ? _choicesNotLogedin : _choices)
+              .map((Choice choice) {
+            return PopupMenuItem<Choice>(
+                value: choice, child: Text(choice.prop1));
+          }).toList();
+        },
+      ),
+    ];
+  }
+
+  List<Widget> getNonLoginActions(Function onCall) {
+    return <Widget>[
+      IconButton(icon: Icon(Icons.search,color: MyColors.white,),onPressed: onCall,),
       PopupMenuButton<Choice>(
         onSelected: _onMenuSelected,
         itemBuilder: (BuildContext context) {
