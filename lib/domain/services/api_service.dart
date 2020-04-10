@@ -107,6 +107,15 @@ class ApiService {
         .map((body) => User.fromJson(jsonDecode(body)));
   }
 
+  Stream<User> changeSearchInFullDb(User user) {
+    return Stream.fromFuture(http.put(baseUrl + "users/setSearchInFullDb/" +
+        user.fullDatabaseSearch.toString(), headers: header))
+        .flatMap((response) => onResponseArrived(response))
+        .onErrorResume((error) => onError(error))
+        .map((body) => User.fromJson(jsonDecode(body)));
+  }
+
+
   Stream<User> getCurrentUser() {
     return Stream.fromFuture(
         http.get(baseUrl + "users/currentUser", headers: header))
@@ -175,6 +184,7 @@ class ApiService {
         .flatMap((body) => Stream.fromIterable(jsonDecode(body)))
         .map((s) => Filter.fromJson(s));
   }
+
 
 
 

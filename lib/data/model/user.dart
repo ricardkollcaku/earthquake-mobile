@@ -3,8 +3,9 @@ class User {
   String lastname;
   String firstname;
   bool isNotificationEnabled;
+  bool fullDatabaseSearch;
 
-  User({this.email, this.lastname, this.firstname, this.isNotificationEnabled});
+  User({this.email, this.lastname, this.firstname, this.isNotificationEnabled,this.fullDatabaseSearch});
 
   User.fromJson(Map<String, dynamic> json) {
     email = json['email'];
@@ -13,6 +14,10 @@ class User {
     isNotificationEnabled = json['isNotificationEnabled'];
     if (isNotificationEnabled == null)
       isNotificationEnabled = true;
+
+    fullDatabaseSearch = json['fullDatabaseSearch'];
+    if (fullDatabaseSearch == null)
+      fullDatabaseSearch = false;
   }
 
   Map<String, dynamic> toJson() {
@@ -21,6 +26,8 @@ class User {
     data['lastName'] = this.lastname;
     data['firstName'] = this.firstname;
     data['isNotificationEnabled'] = this.isNotificationEnabled;
+    data['fullDatabaseSearch'] = this.fullDatabaseSearch;
+
     return data;
   }
 
@@ -30,6 +37,8 @@ class User {
     clonedUser.lastname = user.lastname;
     clonedUser.firstname = user.firstname;
     clonedUser.isNotificationEnabled = user.isNotificationEnabled;
+    clonedUser.fullDatabaseSearch = user.fullDatabaseSearch;
+
     return clonedUser;
   }
 }

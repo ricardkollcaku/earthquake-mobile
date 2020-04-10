@@ -39,7 +39,7 @@ class SettingsState extends State<SettingsFragment> {
                   (BuildContext context, int index) {
                 return getSettingsWidget(index);
               },
-              childCount: 2
+              childCount: 3
           )),
       ]
       ,
@@ -60,6 +60,17 @@ class SettingsState extends State<SettingsFragment> {
         value: UserService.user.isNotificationEnabled,
         title: Text("Earthquake Notifications"),
         onChanged: setNotification,
+      ),
+    );
+  }
+
+  Widget getSearchInFullDb() {
+    return Card(
+      child: SwitchListTile(
+        value: UserService.user.fullDatabaseSearch,
+        title: Text("Search all Earthquakes"),
+        subtitle: Text("When is not activated it searches for last 100 days , When you activate it search for all earthquakes but this reduse app performance"),
+        onChanged: setSearchInAllDb,
       ),
     );
   }
@@ -95,5 +106,13 @@ class SettingsState extends State<SettingsFragment> {
       return getChangePassword();
     if (index == 1)
       return getNotification();
+    if (index == 2)
+      return getSearchInFullDb();
+  }
+
+  void setSearchInAllDb(bool value) {
+    User user = User.clone(UserService.user);
+    user.fullDatabaseSearch = value;
+    _userService.setFullDbSearch(user).listen(updateUser);
   }
 }

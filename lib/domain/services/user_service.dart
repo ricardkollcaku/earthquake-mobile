@@ -42,6 +42,8 @@ class UserService {
   Stream<bool> register(Register register) {
     return _apiService.register(register)
         .flatMap((token) => _sharedPrefsService.setToken(token))
+        .map((token)=>setToken(token))
+        .flatMap((token)=>getCurrentUser())
         .map((token) => true)
         .switchIfEmpty(Stream.value(false))
         .flatMap((isLogin) => _sharedPrefsService.setLogin(isLogin));
@@ -74,5 +76,24 @@ class UserService {
     print(token);
     return _apiService.setFirebaseToken(token);
   }
+
+  Stream<User> setFullDbSearch(User user) {
+    return _apiService
+        .changeSearchInFullDb(user)
+        .flatMap((user) => setUser(user));
+  }
+  String setToken(String token) {
+    return _apiService.setToken(token);
+  }
+
+ Stream<User> getCurrentUser() {
+   return _apiService.getCurrentUser()
+        .map((user)=>setCurrentUser(user));
+ }
+
+ User setCurrentUser(User currentUser){
+    user=currentUser;
+    return user;
+ }
 
 }

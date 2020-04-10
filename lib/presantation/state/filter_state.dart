@@ -193,26 +193,11 @@ class FilterState extends State<FilterActivity> {
     });
   }
 
-  Widget _getCountryFlag(String countryCode) {
-    if (countryCode == null)
-      return Container(
-        width: 15,
-        height: 15,
-      );
-    try {
-      return Flags.getMiniFlag(countryCode, null, 30);
-    } catch (e) {
-      return Container(
-        width: 15,
-        height: 15,
-      );
-    }
-  }
+
 
   DropdownMenuItem<Country> createDropDown(Country e) {
     return new DropdownMenuItem(
         child: ListTile(
-          leading: _getCountryFlag(e.countryCode),
           title: Text(e.country),
           trailing: e.countryCode == null
               ? Container(

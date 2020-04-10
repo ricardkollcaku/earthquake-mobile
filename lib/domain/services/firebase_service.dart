@@ -28,17 +28,17 @@ FirebaseService(){
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
-        _notificationService.showOngoingNotification(_notificationService.flutterLocalNotificationsPlugin,title: "title",body: message.toString());
+        return _notificationService.showOngoingNotification(_notificationService.flutterLocalNotificationsPlugin,title: message['data']['title'] ,body: message['data']['description']);
       },
       onBackgroundMessage: myBackgroundMessageHandler,
       onLaunch: (Map<String, dynamic> message) async {
         print("onlunch: $message");
 
-        _notificationService.showOngoingNotification(_notificationService.flutterLocalNotificationsPlugin,title: "title",body: message.toString());
+        return _notificationService.showOngoingNotification(_notificationService.flutterLocalNotificationsPlugin,title: message['data']['title'] ,body: message['data']['description']);
       },
       onResume: (Map<String, dynamic> message) async {
         print("onresume: $message");
-        _notificationService.showOngoingNotification(_notificationService.flutterLocalNotificationsPlugin,title: "title",body: message.toString());
+        return _notificationService.showOngoingNotification(_notificationService.flutterLocalNotificationsPlugin,title: message['data']['title'] ,body: message['data']['description']);
       },
     );
   }
@@ -49,17 +49,11 @@ static Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) 
     _notificationService.initNotifications();
   }
   if (message.containsKey('data')) {
-    print("onMessage: $message");
-    _notificationService.showOngoingNotification(_notificationService.flutterLocalNotificationsPlugin,title: "title",body: message.toString());
-    final dynamic data = message['data'];
-  }
+    print("onbcq: $message");
 
-  if (message.containsKey('notification')) {
-    print("onMessage: $message");
-    _notificationService.showOngoingNotification(_notificationService.flutterLocalNotificationsPlugin,title: "title",body: message.toString());
-    final dynamic notification = message['notification'];
+    print("onbc2: $message");
+    return _notificationService.showOngoingNotification(_notificationService.flutterLocalNotificationsPlugin,title: message['data']['title'] ,body: message['data']['description']);
   }
-  print('dddd');
   return Future.value(true);
   // Or do other work.
 }
