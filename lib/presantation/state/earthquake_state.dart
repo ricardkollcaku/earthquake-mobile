@@ -1,5 +1,6 @@
 import 'package:earthquake/data/model/earthquake.dart';
 import 'package:earthquake/domain/util/util.dart';
+import 'package:earthquake/presantation/activity/chat_activity.dart';
 import 'package:earthquake/presantation/activity/earthquake_activity.dart';
 import 'package:earthquake/presantation/provider/map_provider.dart';
 import 'package:earthquake/presantation/my_colors.dart';
@@ -25,6 +26,7 @@ class EarthquakeState extends State<EarthquakeActivity> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+     floatingActionButton:   FloatingActionButton(child: Icon(Icons.chat),onPressed: openChat,),
         backgroundColor: MyColors.white,
         body: Builder(builder: (BuildContext context) {
           _buildContext = context;
@@ -236,6 +238,9 @@ class EarthquakeState extends State<EarthquakeActivity> {
           ]),)
     ],);
   }
+
+  openChat() {
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ChatActivity()));  }
 
   /* Text("\t-\t" + _earthquake.country,
         style: TextStyle(
