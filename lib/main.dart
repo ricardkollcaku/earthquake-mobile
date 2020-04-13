@@ -8,10 +8,12 @@ import 'package:earthquake/presantation/activity/splash_screen_activity.dart';
 import 'package:earthquake/presantation/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stetho/flutter_stetho.dart';
+import "package:rxdart/rxdart.dart";
 
 void main() {
   Stetho.initialize();
   runApp(new MyApp(new SplashScreenActivity()));
+
 }
 
 class MyApp extends StatelessWidget {
@@ -95,3 +97,5 @@ class MyApp extends StatelessWidget {
 
 
 }
+
+

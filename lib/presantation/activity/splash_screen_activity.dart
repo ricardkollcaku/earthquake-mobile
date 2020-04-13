@@ -1,5 +1,7 @@
 import 'package:earthquake/domain/services/splash_screen_service.dart';
 import 'package:earthquake/presantation/activity/main_login_activity.dart';
+import 'package:earthquake/presantation/my_colors.dart';
+import 'package:earthquake/presantation/my_icons.dart';
 import 'package:earthquake/presantation/provider/map_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
@@ -23,9 +25,10 @@ class SplashScreenActivity extends StatelessWidget {
   Widget build(BuildContext context) {
     _buildContext = context;
     return Scaffold(
+      backgroundColor: MyColors.accent,
       body: Builder(builder: (BuildContext context) {
         UiHelper.setCurrentScaffoldContext(context);
-        return Center(child: Text("SplashScreenActivity"),);
+        return Center(child: Container(padding: EdgeInsets.all(100),child: Image.asset(MyIcons.SC),),);
       }),
     );
   }

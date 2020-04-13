@@ -40,7 +40,7 @@ class EarthquakeListState extends State<EarthquakeListFragment> {
     // TODO: implement build
 _appBarProvider.context=context;
 
-    return LoadAny(
+    return RefreshIndicator(child: LoadAny(
         onLoadMore: getLoadMore,
         status: _status,
         footerHeight: 40,
@@ -70,7 +70,8 @@ _appBarProvider.context=context;
         ]
           ,
         )
-    );
+    ),
+    onRefresh: getRefresh,);
   }
 onLocalSearchClicked() async{
   _localNotLoginUserFilter = await Navigator.push(
@@ -143,7 +144,7 @@ LatLng center = new LatLng(0,0);
     _earthquakeService.isLogin().listen((b)=>_isLogin=b);
     _earthquakeListView = new EarthquakeListView(40, getLoadMore,context);
     _pageNumber = 0;
-    _elementPerPage = 50;
+    _elementPerPage = 24;
     _appBarProvider = new AppBarProvider(context);
     getData(addRefreshing);
 
