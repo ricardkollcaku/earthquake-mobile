@@ -56,18 +56,20 @@ class ApiService {
       return Stream.error(401);
     }
     UiHelper.showError(response.headers["error"]);
-    return Stream.error("error");
+    return Stream.error(response.headers["error"]);
   }
 
   Stream<String> onError(error) {
-    UiHelper.showError("Error comunicating with server");
+    if (error == null || error
+        .toString()
+        .length == 0)
+      UiHelper.showError("Error comunicating with server");
     return Stream.error(error);
   }
 
   Stream<String> heartBeat(String s) {
     return Stream.fromFuture(http.post(baseUrl + "heartBeat/$s"))
-        .flatMap((response) => onResponseArrived(response))
-        .onErrorResume((error) => onError(error));
+        .flatMap((response) => onResponseArrived(response));
   }
 
 

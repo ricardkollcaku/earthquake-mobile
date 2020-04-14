@@ -1,91 +1,13 @@
-import 'package:earthquake/domain/services/splash_screen_service.dart';
-import 'package:earthquake/presantation/activity/main_login_activity.dart';
-import 'package:earthquake/presantation/my_colors.dart';
-import 'package:earthquake/presantation/my_icons.dart';
-import 'package:earthquake/presantation/provider/map_provider.dart';
+import 'package:earthquake/presantation/state/splash_screen_state.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../ui_helper.dart';
-import 'main_non_login_activity.dart';
 
-class SplashScreenActivity extends StatelessWidget {
+class SplashScreenActivity extends StatefulWidget {
   static const String tag = 'splash-screen-page';
-  SplashScreenService _screenService;
-  BuildContext _buildContext;
-
-  SplashScreenActivity() {
-    _screenService = new SplashScreenService();
-    initApp();
-
-  }
 
   @override
-  Widget build(BuildContext context) {
-    _buildContext = context;
-    return Scaffold(
-      backgroundColor: MyColors.accent,
-      body: Builder(builder: (BuildContext context) {
-        UiHelper.setCurrentScaffoldContext(context);
-        return Center(child: Container(padding: EdgeInsets.all(100),child: Image.asset(MyIcons.SC),),);
-      }),
-    );
+  State<StatefulWidget> createState() {
+    return SplashScreenState();
   }
-
-  void initApp() {
-    _screenService
-        .initLocalSharedPrefs()
-        .map((t) => initUtils(t))
-        .flatMap((shp) => _screenService.serverHeartBeat())
-        .flatMap((shp) => _screenService.isLogin())
-        .flatMap((isLogin) =>
-    isLogin ?
-    doOnLogin(isLogin) :
-    doOnNotLogin(isLogin))
-        .map((bool) => redirectToActivity(bool))
-        .onErrorResume((e) => onError(e))
-        .listen(onData);
-  }
-
-  Stream<bool> doOnLogin(bool isLogin){
-    return _screenService.saveCurrentUserOnShp(isLogin).flatMap((bool)=>registerFirebaseToken(bool));
-
-  }
-
-  Stream<bool> doOnNotLogin(bool isLogin){
-    return Stream.value(false);
-  }
-
-  bool redirectToActivity(bool isLogin) {
-    if (isLogin)
-      Navigator.of(_buildContext)
-          .pushReplacementNamed(MainLoginActivity.tag);
-    else
-      Navigator.of(_buildContext)
-          .pushReplacementNamed(MainNonLoginActivity.tag);
-    return isLogin;
-  }
-
-  void onData(event) {}
-
-  SharedPreferences initUtils(SharedPreferences t) {
-    MapProvider.initMapProvider();
-    return t;
-  }
-
-  Stream<bool> onError(e) {
-    if (e == 401)
-      return _screenService.logoutUser()
-          .map((bool) => redirectToActivity(bool));
-    return Stream.empty();
-  }
-
-  Stream<bool>registerFirebaseToken(bool b) {
-    return _screenService.registerFirebaseToken()
-        .map((s)=>b);
-  }
-
-
 
 }

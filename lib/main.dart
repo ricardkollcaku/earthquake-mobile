@@ -1,14 +1,10 @@
-import 'package:earthquake/presantation/activity/change_password_activity.dart';
 import 'package:earthquake/presantation/activity/filter_activity.dart';
-import 'package:earthquake/presantation/activity/forgot_password_activity.dart';
 import 'package:earthquake/presantation/activity/main_login_activity.dart';
 import 'package:earthquake/presantation/activity/main_non_login_activity.dart';
-import 'package:earthquake/presantation/activity/register_activity.dart';
 import 'package:earthquake/presantation/activity/splash_screen_activity.dart';
 import 'package:earthquake/presantation/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stetho/flutter_stetho.dart';
-import "package:rxdart/rxdart.dart";
 
 void main() {
   Stetho.initialize();
@@ -68,24 +64,7 @@ class MyApp extends StatelessWidget {
           },
         );
 
-      case ForgotPasswordActivity.tag:
-        return MaterialPageRoute(
-          builder: (context) {
-            return ForgotPasswordActivity();
-          },
-        );
-      case RegisterActivity.tag:
-        return MaterialPageRoute(
-          builder: (context) {
-            return RegisterActivity();
-          },
-        );
-      case ChangePasswordActivity.tag:
-        return MaterialPageRoute(
-          builder: (context) {
-            return ChangePasswordActivity();
-          },
-        );
+
       case FilterActivity.tag:
         return MaterialPageRoute(
           builder: (context) {

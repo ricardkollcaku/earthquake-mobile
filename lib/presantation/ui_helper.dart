@@ -11,6 +11,7 @@ class UiHelper {
   }
 
   static void _showSms(String error) {
+    print(error);
     Scaffold.of(currentScaffoldContext).showSnackBar(SnackBar(
         content: Text(error == null ? "Error" : error)));
   }
@@ -104,6 +105,66 @@ class UiHelper {
 
   }
 
+  static Widget getHintedTextFormField(String hint, bool obscure,
+      Function onSaved,
+      IconData icon, Function(String) validator, Color primary) {
+    return Container(
+      padding: EdgeInsets.only(left: 20, right: 20),
+      child: TextFormField(
+        validator: validator,
+        onSaved: onSaved,
+        autofocus: false,
+        obscureText: obscure,
+        style: TextStyle(
+          fontSize: 14,
+        ),
+        decoration: InputDecoration(
+            hintStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+            hintText: hint,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide(
+                color: primary,
+                width: 2,
+              ),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide(
+                color: primary,
+                width: 3,
+              ),
+            ),
+            prefixIcon: Padding(
+              child: IconTheme(
+                data: IconThemeData(color: primary),
+                child: Icon(icon),
+              ),
+              padding: EdgeInsets.only(left: 30, right: 10),
+            )),
+      ),
+    );
+  }
 
+  static Widget button(String text, Color splashColor, Color highlightColor,
+      Color fillColor, Color textColor, void function()) {
+    return RaisedButton(
+      highlightElevation: 0.0,
+      splashColor: splashColor,
+      highlightColor: highlightColor,
+      elevation: 0.0,
+      color: fillColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(30.0)),
+      child: Text(
+        text,
+        style: TextStyle(
+            fontWeight: FontWeight.bold, color: textColor, fontSize: 14),
+      ),
+      onPressed: () {
+        function();
+      },
+    );
+  }
 
 }

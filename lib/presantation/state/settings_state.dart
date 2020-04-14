@@ -1,8 +1,8 @@
 import 'package:earthquake/data/model/user.dart';
 import 'package:earthquake/domain/services/user_service.dart';
-import 'package:earthquake/presantation/activity/change_password_activity.dart';
 import 'package:earthquake/presantation/fragment/settings_fragment.dart';
 import 'package:earthquake/presantation/provider/app_bar_provider.dart';
+import 'package:earthquake/presantation/sheet/change_password_sheet.dart';
 import 'package:flutter/material.dart';
 
 import '../my_colors.dart';
@@ -10,8 +10,10 @@ import '../my_colors.dart';
 class SettingsState extends State<SettingsFragment> {
   UserService _userService;
   AppBarProvider _appBarProvider;
+  GlobalKey<ScaffoldState> _scaffoldKey;
 
-  SettingsState() {
+  SettingsState(GlobalKey<ScaffoldState> scaffoldKey) {
+    _scaffoldKey = scaffoldKey;
     initFields();
   }
 
@@ -24,7 +26,7 @@ class SettingsState extends State<SettingsFragment> {
     return CustomScrollView(
       slivers: <Widget>[ SliverAppBar(
         iconTheme: IconThemeData(color: Colors.white, size: 10.0),
-        actions: _appBarProvider.getActions(),
+        actions: _appBarProvider.getActions(_scaffoldKey),
         pinned: true,
         expandedHeight: 200.0,
         backgroundColor: MyColors.accent,
@@ -93,7 +95,8 @@ class SettingsState extends State<SettingsFragment> {
   }
 
   void changePassword() {
-    Navigator.pushNamed(context, ChangePasswordActivity.tag);
+    ChangePasswordSheet changePasswordSheet = new ChangePasswordSheet(context);
+    changePasswordSheet.changePasswordSheet(_scaffoldKey);
   }
 
   void updateUser(User user) {

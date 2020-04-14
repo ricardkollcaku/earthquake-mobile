@@ -1,12 +1,10 @@
 import 'package:earthquake/data/model/earthquake.dart';
 import 'package:earthquake/domain/util/util.dart';
 import 'package:earthquake/presantation/activity/earthquake_activity.dart';
-import 'package:earthquake/presantation/provider/map_provider.dart';
 import 'package:earthquake/presantation/my_colors.dart';
-import 'package:flag/flag.dart';
+import 'package:earthquake/presantation/provider/map_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
 
 import '../ui_helper.dart';
@@ -17,6 +15,7 @@ class EarthquakeState extends State<EarthquakeActivity> {
   Earthquake _earthquake;
   ScrollController _controller;
   bool silverCollapsed = false;
+
   EarthquakeState(Earthquake earthquake) {
     _earthquake = earthquake;
     initFields();
@@ -90,9 +89,11 @@ class EarthquakeState extends State<EarthquakeActivity> {
       height: 300,
       child: FlutterMap(
         options: new MapOptions(
-          center: new LatLng(earthquake.geometry.coordinates[1],
-              earthquake.geometry.coordinates[0]),
-          zoom: 8.0,
+            center: new LatLng(earthquake.geometry.coordinates[1],
+                earthquake.geometry.coordinates[0]),
+            zoom: 8.0,
+            minZoom: 1
+
         ),
         layers: [
           UiHelper.getMapTile(),
@@ -159,7 +160,6 @@ class EarthquakeState extends State<EarthquakeActivity> {
         truncateWithEllipsis(35, Util.getLocalTime(_earthquake.properties.time))));
 
 
-
     _widgets.add(getText(Icons.warning, truncateWithEllipsis(25, "Tsunami"),
         truncateWithEllipsis(
             35, _earthquake.properties.tsunami == 0 ? "No" : "Yes")));
@@ -167,7 +167,7 @@ class EarthquakeState extends State<EarthquakeActivity> {
 
     _widgets.add(
         getText(Icons.timeline, truncateWithEllipsis(25, "Significant"),
-        truncateWithEllipsis(35, _earthquake.properties.sig.toString())));
+            truncateWithEllipsis(35, _earthquake.properties.sig.toString())));
 
     _widgets.add(
         getText(
@@ -178,6 +178,8 @@ class EarthquakeState extends State<EarthquakeActivity> {
         getText(Icons.play_for_work,
             truncateWithEllipsis(25, "Distance from station"),
             truncateWithEllipsis(35, _earthquake.properties.dmin.toString())));
+
+    _widgets.add(SizedBox(height: 150,));
 
 
     return _widgets;
@@ -237,12 +239,10 @@ class EarthquakeState extends State<EarthquakeActivity> {
     ],);
   }
 
-  /* Text("\t-\t" + _earthquake.country,
+/* Text("\t-\t" + _earthquake.country,
         style: TextStyle(
             color: silverCollapsed ? MyColors.white : MyColors.getColor(
                 _earthquake.properties.mag)),)*/
-
-
 
 
 }

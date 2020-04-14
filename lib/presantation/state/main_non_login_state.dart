@@ -16,10 +16,14 @@ class MainNonLoginState extends State<MainNonLoginActivity> {
     initVariables();
   }
 
+  static final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<
+      ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     _buildContext = context;
     return Scaffold(
+      key: _scaffoldKey,
       body: Builder(builder: (BuildContext context) {
         UiHelper.setCurrentScaffoldContext(context);
         return _currentActiveFragment;
@@ -46,7 +50,8 @@ class MainNonLoginState extends State<MainNonLoginActivity> {
 
 
   List<Choice> _fragments = <Choice>[
-    Choice(prop1: EarthquakeListFragment(), prop2: BottomNavigationBarItem(
+    Choice(prop1: EarthquakeListFragment(_scaffoldKey),
+        prop2: BottomNavigationBarItem(
         icon: Icon(Icons.map), title: Text('Earthquake'))),
     Choice(prop1: LoginFragment(), prop2: BottomNavigationBarItem(
         icon: Icon(Icons.perm_identity), title: Text('User')))

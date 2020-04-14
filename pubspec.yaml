@@ -1,5 +1,5 @@
 name: earthquake
-description: Earthquake in real time
+description: Earthquake is an app created to show earthquakes in real time. created to be user friendly with dynamic filters. Is fast and stable. We show earthquakes from 1980 till now. Activate notification to get real time notifications for your grup of filters.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -39,10 +39,12 @@ dependencies:
   geolocator: ^5.3.1
   firebase_messaging: ^6.0.13
   flutter_local_notifications: ^1.4.0
-  dash_chat: ^1.0.18
+  #dash_chat: ^1.0.18
   flutter_device_type: ^0.2.0
   flutter_launcher_icons: ^0.7.4
   flutter_native_splash: ^0.1.9
+  flutter_launcher_name: ^0.0.1
+
 
 
 
@@ -60,6 +62,9 @@ flutter_native_splash:
   image: assets/sc.png
   color: "00ADEF"
   android_disable_fullscreen: true
+
+flutter_launcher_name:
+  name: "Earthquake"
 
 
 
@@ -79,6 +84,8 @@ flutter:
     - assets/logo.png
     - assets/logod.png
     - assets/sc.png
+    - assets/no_internet.png
+
 
 
   # To add assets to your application, add an assets section, like this:

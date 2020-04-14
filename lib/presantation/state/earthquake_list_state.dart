@@ -29,8 +29,10 @@ class EarthquakeListState extends State<EarthquakeListFragment> {
   AppBarProvider _appBarProvider;
   bool _isLogin=true;
   Filter _localNotLoginUserFilter;
+  GlobalKey<ScaffoldState> _scaffoldKey;
 
-  EarthquakeListState() {
+  EarthquakeListState(GlobalKey<ScaffoldState> scaffoldKey) {
+    _scaffoldKey = scaffoldKey;
     initField();
   }
 
@@ -49,7 +51,10 @@ _appBarProvider.context=context;
         loadMoreBuilder: _earthquakeListView.loadMoreBuilder,
         child: CustomScrollView(
           controller: _controller, slivers: <Widget>[ SliverAppBar(
-          actions: _isLogin?_appBarProvider.getActions():_appBarProvider.getNonLoginActions(onLocalSearchClicked),
+          actions: _isLogin
+              ? _appBarProvider.getActions(_scaffoldKey)
+              : _appBarProvider.getNonLoginActions(
+              onLocalSearchClicked, _scaffoldKey),
           pinned: true,
           iconTheme: IconThemeData(color: Colors.white, size: 10.0),
           expandedHeight: 300.0,
@@ -91,6 +96,7 @@ onLocalSearchClicked() async{
           ],
           center: new LatLng(0, 0),
           zoom: 1,
+            minZoom: 1
         ),
         layers: [
           UiHelper.getMapTile(),
