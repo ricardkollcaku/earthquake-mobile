@@ -4,6 +4,9 @@ import 'package:earthquake/presantation/activity/main_non_login_activity.dart';
 import 'package:earthquake/presantation/my_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
+
+import '../ui_helper.dart';
 
 class AppBarProvider {
   BuildContext _context;
@@ -156,6 +159,18 @@ class AppBarProvider {
                       SizedBox(
                         height: 20,
                       ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 20,
+                            right: 20,
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: Container(
+                          child: UiHelper.button("CONTACT US", Colors.white,
+                              MyColors.accent, MyColors.accent, Colors.white, sendEmail),
+                          height: 50,
+                          width: MediaQuery.of(context).size.width,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -178,11 +193,21 @@ class AppBarProvider {
   }
   void onData(bool event) {}
 
+  void sendEmail() async{
+    final Email email = Email(
+      subject: 'Earthquake Conntact',
+      recipients: ['richard.kollcaku@gmail.com'],
+      isHTML: false,
+    );
+
+    await FlutterEmailSender.send(email);
+  }
+
   String getAboutText() {
     return "This App is created by Ricard Kollcaku.\n" +
-        "This is not a profitable App is totally free and we dont run adds to generate money.\n" +
-        "For any suggestion please contact me.\n" +
-        "If you want to be part in mentaining and developing new features plese conntact me.\n" +
+        "Earthquake is not a profitable App is totally free and we dont run ads to generate money.\n" +
+        "For any suggestion please contact us.\n" +
+        "If you want to be part in mentaining and developing new features plese conntact us.\n" +
         "If you eant to help with design (logo colors) please conntact.\n" +
         "This app (mobile and server) will be soon published opensource in GitHub.\n" +
         "Contact info: richard.kollcaku@gmail.com";

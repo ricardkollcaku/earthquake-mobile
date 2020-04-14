@@ -93,15 +93,7 @@ class SplashScreenState extends State<SplashScreenActivity> {
 
   void initWidget() {
     _myState = Center(
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(top: 150, left: 100, right: 100),
-            child: Image.asset(MyIcons.SC),
-          ),
-          CircularProgressIndicator()
-        ],
-      ),
+      child: CircularProgressIndicator(backgroundColor: MyColors.white, strokeWidth: 100,),
     );
   }
 
