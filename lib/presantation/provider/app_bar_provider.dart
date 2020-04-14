@@ -204,12 +204,22 @@ class AppBarProvider {
   }
 
   String getAboutText() {
-    return "This App is created by Ricard Kollcaku.\n" +
-        "Earthquake is not a profitable App is totally free and we dont run ads to generate money.\n" +
-        "For any suggestion please contact us.\n" +
-        "If you want to be part in mentaining and developing new features plese conntact us.\n" +
-        "If you eant to help with design (logo colors) please conntact.\n" +
-        "This app (mobile and server) will be soon published opensource in GitHub.\n" +
-        "Contact info: richard.kollcaku@gmail.com";
+    return "This App is created by Ricard Kollcaku.\n"
+        "\n"
+        "Earthquake is not a profitable App is totally free and we dont run ads to generate money.\n"
+        "We want to provide best experience and performance  to our users.\n"
+        "We peovide multiple filters by country and magnitude.\n"
+        "We peovide multiple notification filter.\n"
+        "Filter and get notification as you want to.\n"
+        "We filter and show earthquakes from 1980.\n"
+        "\n"
+        "Contact Us:\n"
+        "\n"
+        "Any suggestion, Performance issue.\n"
+        "Found a bug.\n"
+        "Want to contribute (design, logo, ui, development)\n"
+        "Contact info: richard.kollcaku@gmail.com\n"
+        "\n"
+        "\"Source code for both mobile and server will be opensource in github soon\"";
   }
 }
