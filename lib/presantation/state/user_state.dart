@@ -26,7 +26,16 @@ class UserState extends State<LoginFragment> {
                     primary, _loginSheet),
                 height: 50,
               ),
-              padding: EdgeInsets.only(top: 80, left: 20, right: 20),
+              padding: EdgeInsets.only(top: 40, left: 20, right: 20),
+            ),
+            Padding(
+              child: Container(
+                child: _button(
+                    "GUEST LOGIN", primary, Colors.white, Colors.white,
+                    primary, _registerGuestSheet),
+                height: 50,
+              ),
+              padding: EdgeInsets.only(top: 10, left: 20, right: 20),
             ),
             Padding(
               child: Container(
@@ -36,6 +45,7 @@ class UserState extends State<LoginFragment> {
               ),
               padding: EdgeInsets.only(top: 10, left: 20, right: 20),
             ),
+
             Padding(
               child: Container(
                 child: _button("FORGOT PASSWORD", primary, Colors.white,
@@ -71,6 +81,10 @@ class UserState extends State<LoginFragment> {
     registerSheet.registerSheet(_scaffoldKey);
   }
 
+  _registerGuestSheet() {
+    RegisterSheet registerSheet = new RegisterSheet(context);
+    registerSheet.guestRegister();
+  }
   _forgotPassword() {
     ForgotPasswordSheet forgotPasswordSheet = new ForgotPasswordSheet(context);
     forgotPasswordSheet.forgotPasswordSheet(_scaffoldKey);
