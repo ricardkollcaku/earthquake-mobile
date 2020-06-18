@@ -45,6 +45,7 @@ dependencies:
   flutter_native_splash: ^0.1.9
   flutter_launcher_name: ^0.0.1
   flutter_email_sender: ^3.0.1
+  web_socket_channel: ^1.1.0
 
 
 

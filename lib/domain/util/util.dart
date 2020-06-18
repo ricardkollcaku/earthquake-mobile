@@ -35,5 +35,9 @@ class Util {
         .format(new DateTime.fromMillisecondsSinceEpoch(time).toLocal());
   }
 
+  static DateTime getLocalDateTime(int time){
+  return  new DateTime.fromMillisecondsSinceEpoch(time).toLocal();
+  }
+
 
 }

@@ -1,11 +1,16 @@
+import 'package:earthquake/data/model/earthquake.dart';
 import 'package:earthquake/presantation/state/chat_state.dart';
 import 'package:flutter/material.dart';
 
 class ChatActivity extends StatefulWidget{
+  Earthquake _earthquake;
+
+  ChatActivity(this._earthquake);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return ChatState();
+    return ChatState(_earthquake);
   }
 
 }

@@ -1,19 +1,31 @@
 
 import 'package:dash_chat/dash_chat.dart';
+import 'package:earthquake/data/model/earthquake.dart';
+import 'package:earthquake/data/model/my_chat_message.dart';
+import 'package:earthquake/domain/services/api_service.dart';
+import 'package:earthquake/domain/util/util.dart';
 import 'package:earthquake/presantation/activity/chat_activity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
+import 'package:web_socket_channel/io.dart';
+import 'dart:convert';
 
 class ChatState extends State<ChatActivity>{
   List<ChatMessage> _messages;
-  ChatState(){
+  Earthquake _earthquake;
+  User _user;
+  IOWebSocketChannel _channel;
+  ChatState(Earthquake earthquake){
+    _earthquake=earthquake;
     initField();
   }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(body:
-    DashChat(user: ChatUser(name: "richard",uid: "sadfa"),
+    DashChat(user: ChatUser(uid:_user.id,
+        name: _user.name,
+        lastName: _user.lastName ),
       messages: _messages,
       showUserAvatar: true,
       showInputCursor: true,
@@ -25,20 +37,51 @@ class ChatState extends State<ChatActivity>{
       },
       showAvatarForEveryMessage: true,
       shouldShowLoadEarlier: true,
-      onSend: onSend,),
+      onSend: onMessageSend,),
     appBar: AppBar(title: Text("Chat"),),);
   }
 
 
-  onSend(ChatMessage message ) {
-    _messages.add(message);
+  @override
+  void dispose() {
+_channel.sink.close();
+super.dispose();
+  }
+
+  onMessageSend(ChatMessage message ) {
+    MyChatMessage myChatMessage = new MyChatMessage();
+    myChatMessage.earthquakeId=_earthquake.id;
+    myChatMessage.message=message.text;
+    myChatMessage.id=message.id;
+    myChatMessage.user=_user;
+    _channel.sink.add(jsonEncode(myChatMessage.toJson()));
   }
 
   void initField() {
+    _user = new User();
+    _user.name="richard";
+    _user.id="richard_kollcaku@hotmail.com";
+    _user.lastName="kollcaku";
+    Map<String, dynamic> headers= new Map();
+    headers["earthquakeId"]=_earthquake.id;
+    _channel=  IOWebSocketChannel.connect(ApiService.webSocket,headers: headers);
+    _channel.stream.listen((message) {
+      MyChatMessage myChatMessage = MyChatMessage.fromJson(jsonDecode(message));
+      setState(() {
+        _messages.add(new ChatMessage(id:myChatMessage.id,
+            text: myChatMessage.message,
+            createdAt:Util.getLocalDateTime(myChatMessage.createdTime),
+            user: new ChatUser(uid:myChatMessage.user.id,
+                name: myChatMessage.user.name,
+                lastName: myChatMessage.user.lastName )));
+      });
+
+
+    });
+
+
+
     _messages = new List();
-    _messages.add(new ChatMessage(text: "test1", user: ChatUser(name: "paqiz",uid: "111")));
-    _messages.add(new ChatMessage(text: "test2",video: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", user: ChatUser(name: "paqizz",uid: "fdsfgfs")));
-    _messages.add(new ChatMessage(text: "test3",image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png", user: ChatUser(name: "jo mer", uid: "sdfsf",)));
 
   }
 }

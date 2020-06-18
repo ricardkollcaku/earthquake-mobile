@@ -248,7 +248,7 @@ class EarthquakeState extends State<EarthquakeActivity> {
   }
 
   openChat() {
-    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ChatActivity()));  }
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ChatActivity(_earthquake)));  }
 
   /* Text("\t-\t" + _earthquake.country,
         style: TextStyle(
