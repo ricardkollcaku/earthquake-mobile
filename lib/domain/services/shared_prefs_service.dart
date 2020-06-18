@@ -28,21 +28,17 @@ class SharedPrefsService {
     return _sharedPrefs.setToken(token.token);
   }
 
-  Stream<String> getToken(){
+  Stream<String> getToken() {
     return _sharedPrefs.getToken();
   }
 
   Stream<User> setUser(User user) {
-    return _sharedPrefs
-        .setUser(json.encode(user.toJson()))
-        .map((s) => user);
+    return _sharedPrefs.setUser(json.encode(user.toJson())).map((s) => user);
   }
 
   Stream<User> getUser() {
-    return _sharedPrefs.getUser()
-        .map((s) => User.fromJson(json.decode(s)));
+    return _sharedPrefs.getUser().map((s) => User.fromJson(json.decode(s)));
   }
-
 
   Stream<bool> removeToken() {
     return _sharedPrefs.removeToken();

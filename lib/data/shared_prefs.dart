@@ -38,7 +38,6 @@ class SharedPrefs {
         .map((isSaved) => login);
   }
 
-
   getFalseOnNull(bool boolean) {
     return boolean == null ? false : boolean;
   }
@@ -54,8 +53,7 @@ class SharedPrefs {
   }
 
   Stream<String> setToken(String token) {
-    return Stream
-        .fromFuture(_prefs.setString(_TOKEN, token))
+    return Stream.fromFuture(_prefs.setString(_TOKEN, token))
         .where((isSaved) => (isSaved))
         .map((isSaved) => token);
   }

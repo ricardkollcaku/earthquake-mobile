@@ -18,10 +18,10 @@ class AppBarProvider {
   }
 
   GlobalKey<ScaffoldState> _scaffoldKey;
+
   set context(BuildContext value) {
     _context = value;
   }
-
 
   List<Widget> getActions(GlobalKey<ScaffoldState> scaffoldKey) {
     _scaffoldKey = scaffoldKey;
@@ -39,11 +39,17 @@ class AppBarProvider {
     ];
   }
 
-  List<Widget> getNonLoginActions(Function onCall,
-      GlobalKey<ScaffoldState> scaffoldKey) {
+  List<Widget> getNonLoginActions(
+      Function onCall, GlobalKey<ScaffoldState> scaffoldKey) {
     _scaffoldKey = scaffoldKey;
     return <Widget>[
-      IconButton(icon: Icon(Icons.search,color: MyColors.white,),onPressed: onCall,),
+      IconButton(
+        icon: Icon(
+          Icons.search,
+          color: MyColors.white,
+        ),
+        onPressed: onCall,
+      ),
       PopupMenuButton<Choice>(
         onSelected: _onMenuSelected,
         itemBuilder: (BuildContext context) {
@@ -58,10 +64,9 @@ class AppBarProvider {
   }
 
   void _onMenuSelected(Choice value) {
-    if (value == _choices[0] || value == _choicesNotLogedin[0]) _about(
-        _scaffoldKey);
+    if (value == _choices[0] || value == _choicesNotLogedin[0])
+      _about(_scaffoldKey);
     if (value == _choices[1]) logout();
-
   }
 
   List<Choice> _choices = <Choice>[
@@ -72,7 +77,6 @@ class AppBarProvider {
   List<Choice> _choicesNotLogedin = <Choice>[
     Choice(prop1: 'About', prop2: Icons.phone),
   ];
-
 
   void logout() {
     _userService.logout().listen(onData);
@@ -115,10 +119,7 @@ class AppBarProvider {
                   child: Column(
                     children: <Widget>[
                       Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                        width: MediaQuery.of(context).size.width,
                         height: 140,
                         child: Stack(
                           children: <Widget>[
@@ -153,9 +154,10 @@ class AppBarProvider {
                       Padding(
                         padding: EdgeInsets.only(
                             bottom: 20, top: 60, left: 20, right: 20),
-                        child: Text(getAboutText(),),
+                        child: Text(
+                          getAboutText(),
+                        ),
                       ),
-
                       SizedBox(
                         height: 20,
                       ),
@@ -165,8 +167,13 @@ class AppBarProvider {
                             right: 20,
                             bottom: MediaQuery.of(context).viewInsets.bottom),
                         child: Container(
-                          child: UiHelper.button("CONTACT US", Colors.white,
-                              MyColors.accent, MyColors.accent, Colors.white, sendEmail),
+                          child: UiHelper.button(
+                              "CONTACT US",
+                              Colors.white,
+                              MyColors.accent,
+                              MyColors.accent,
+                              Colors.white,
+                              sendEmail),
                           height: 50,
                           width: MediaQuery.of(context).size.width,
                         ),
@@ -176,24 +183,18 @@ class AppBarProvider {
                 ),
               ],
             ),
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 1.3,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            height: MediaQuery.of(context).size.height / 1.3,
+            width: MediaQuery.of(context).size.width,
             color: Colors.white,
           ),
-
         ),
       );
     });
   }
+
   void onData(bool event) {}
 
-  void sendEmail() async{
+  void sendEmail() async {
     final Email email = Email(
       subject: 'Earthquake Conntact',
       recipients: ['richard.kollcaku@gmail.com'],

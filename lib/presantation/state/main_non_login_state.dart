@@ -16,8 +16,8 @@ class MainNonLoginState extends State<MainNonLoginActivity> {
     initVariables();
   }
 
-  static final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<
-      ScaffoldState>();
+  static final GlobalKey<ScaffoldState> _scaffoldKey =
+      new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -32,31 +32,29 @@ class MainNonLoginState extends State<MainNonLoginActivity> {
     );
   }
 
-
-
   BottomNavigationBar getBottomNavigationBar() {
     return BottomNavigationBar(
       currentIndex: _selectedBottomNavigationBarIndex,
       onTap: _onBottomNavigationBarItemSelected,
-      items:
-      _fragments.map((choice) => choice.prop2)
+      items: _fragments
+          .map((choice) => choice.prop2)
           .map((dynami) => ((dynami as BottomNavigationBarItem)))
           .toList(),
     );
   }
 
-  void onSearchClicked() {
-  }
-
+  void onSearchClicked() {}
 
   List<Choice> _fragments = <Choice>[
-    Choice(prop1: EarthquakeListFragment(_scaffoldKey),
+    Choice(
+        prop1: EarthquakeListFragment(_scaffoldKey),
         prop2: BottomNavigationBarItem(
-        icon: Icon(Icons.map), title: Text('Earthquake'))),
-    Choice(prop1: LoginFragment(), prop2: BottomNavigationBarItem(
-        icon: Icon(Icons.perm_identity), title: Text('User')))
+            icon: Icon(Icons.map), title: Text('Earthquake'))),
+    Choice(
+        prop1: LoginFragment(),
+        prop2: BottomNavigationBarItem(
+            icon: Icon(Icons.perm_identity), title: Text('User')))
   ];
-
 
   void _onBottomNavigationBarItemSelected(int value) {
     setState(() {
@@ -69,7 +67,4 @@ class MainNonLoginState extends State<MainNonLoginActivity> {
     _selectedBottomNavigationBarIndex = 0;
     _currentActiveFragment = _fragments[0].prop1;
   }
-
 }
-
-

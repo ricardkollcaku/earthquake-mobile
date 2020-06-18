@@ -20,12 +20,11 @@ class ApiService {
 //  String baseUrl = "http://192.168.0.3:9501/api/v1/";
   //String baseUrl = "http://[2a02:8108:8f80:2ad6:30b5:aaea:db47:4b04]:8080/api/v1/";
 
- static Map<String, String> header;
+  static Map<String, String> header;
   static String _token = "";
 
   ApiService({String token = ""}) {
-    if (token != "")
-      _token = token;
+    if (token != "") _token = token;
     header = {
       "accept": "application/json",
       "content-type": "application/json",
@@ -52,7 +51,7 @@ class ApiService {
 
   Stream<String> onResponseArrived(http.Response response) {
     if (response.statusCode == 200) return Stream.value(response.body);
-    if(response.statusCode==401){
+    if (response.statusCode == 401) {
       UiHelper.showError("User is unauthorized");
       return Stream.error(401);
     }
@@ -61,9 +60,7 @@ class ApiService {
   }
 
   Stream<String> onError(error) {
-    if (error == null || error
-        .toString()
-        .length == 0)
+    if (error == null || error.toString().length == 0)
       UiHelper.showError("Error comunicating with server");
     return Stream.error(error);
   }
@@ -73,10 +70,9 @@ class ApiService {
         .flatMap((response) => onResponseArrived(response));
   }
 
-
   Stream<Token> register(Register register) {
     return Stream.fromFuture(http.post(baseUrl + "users/register",
-        body: (json.encode(register.toJson())), headers: header))
+            body: (json.encode(register.toJson())), headers: header))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error))
         .map((body) => Token.fromJson(jsonDecode(body)));
@@ -88,49 +84,58 @@ class ApiService {
         .onErrorResume((error) => onError(error));
   }
 
-
   Stream<String> setFirebaseToken(String s) {
-    return Stream.fromFuture(http.put(baseUrl + "users/token/$s",headers: header))
+    return Stream.fromFuture(
+            http.put(baseUrl + "users/token/$s", headers: header))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error));
   }
+
   Stream<User> changePassword(ChangePassword changePassword) {
     return Stream.fromFuture(http.put(baseUrl + "users/changePassword",
-        body: (json.encode(changePassword.toJson())), headers: header))
+            body: (json.encode(changePassword.toJson())), headers: header))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error))
         .map((body) => User.fromJson(jsonDecode(body)));
   }
 
   Stream<User> changeNotification(User user) {
-    return Stream.fromFuture(http.put(baseUrl + "users/setNotification/" +
-        user.isNotificationEnabled.toString(), headers: header))
+    return Stream.fromFuture(http.put(
+            baseUrl +
+                "users/setNotification/" +
+                user.isNotificationEnabled.toString(),
+            headers: header))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error))
         .map((body) => User.fromJson(jsonDecode(body)));
   }
 
   Stream<User> changeSearchInFullDb(User user) {
-    return Stream.fromFuture(http.put(baseUrl + "users/setSearchInFullDb/" +
-        user.fullDatabaseSearch.toString(), headers: header))
+    return Stream.fromFuture(http.put(
+            baseUrl +
+                "users/setSearchInFullDb/" +
+                user.fullDatabaseSearch.toString(),
+            headers: header))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error))
         .map((body) => User.fromJson(jsonDecode(body)));
   }
-
 
   Stream<User> getCurrentUser() {
     return Stream.fromFuture(
-        http.get(baseUrl + "users/currentUser", headers: header))
+            http.get(baseUrl + "users/currentUser", headers: header))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error))
         .map((body) => User.fromJson(jsonDecode(body)));
   }
 
-  Stream<Earthquake> getAllEarthquakes(int pageNr, int elementPerPage,{double mag ,int countryKey}) {
-    return Stream.fromFuture(
-        http.get(baseUrl +
-            "earthquake/all?pageNumber=$pageNr&elementPerPage=$elementPerPage"+(mag!=null?"&mag=$mag":"")+(countryKey!=null?"&countryKey=$countryKey":""),
+  Stream<Earthquake> getAllEarthquakes(int pageNr, int elementPerPage,
+      {double mag, int countryKey}) {
+    return Stream.fromFuture(http.get(
+            baseUrl +
+                "earthquake/all?pageNumber=$pageNr&elementPerPage=$elementPerPage" +
+                (mag != null ? "&mag=$mag" : "") +
+                (countryKey != null ? "&countryKey=$countryKey" : ""),
             headers: header))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error))
@@ -139,9 +144,9 @@ class ApiService {
   }
 
   Stream<Earthquake> getUserAllEarthquakes(int pageNr, int elementPerPage) {
-    return Stream.fromFuture(
-        http.get(baseUrl +
-            "earthquake/user?pageNumber=$pageNr&elementPerPage=$elementPerPage",
+    return Stream.fromFuture(http.get(
+            baseUrl +
+                "earthquake/user?pageNumber=$pageNr&elementPerPage=$elementPerPage",
             headers: header))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error))
@@ -150,9 +155,7 @@ class ApiService {
   }
 
   Stream<Filter> getAllFilter() {
-    return Stream.fromFuture(
-        http.get(baseUrl + "filters",
-            headers: header))
+    return Stream.fromFuture(http.get(baseUrl + "filters", headers: header))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error))
         .flatMap((body) => Stream.fromIterable(jsonDecode(body)))
@@ -160,8 +163,7 @@ class ApiService {
   }
 
   Stream<Filter> removeFilter(Filter filter) {
-    return Stream.fromFuture(
-        http.put(baseUrl + "filters",
+    return Stream.fromFuture(http.put(baseUrl + "filters",
             headers: header, body: (json.encode(filter.toJson()))))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error))
@@ -170,9 +172,7 @@ class ApiService {
   }
 
   Stream<Country> getAllCountries() {
-   return Stream.fromFuture(
-        http.get(baseUrl + "country",
-            headers: header))
+    return Stream.fromFuture(http.get(baseUrl + "country", headers: header))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error))
         .flatMap((body) => Stream.fromIterable(jsonDecode(body)))
@@ -181,14 +181,10 @@ class ApiService {
 
   Stream<Filter> createFilter(Filter filter) {
     return Stream.fromFuture(http.post(baseUrl + "filters",
-        body: (json.encode(filter.toJson())), headers: header))
+            body: (json.encode(filter.toJson())), headers: header))
         .flatMap((response) => onResponseArrived(response))
         .onErrorResume((error) => onError(error))
         .flatMap((body) => Stream.fromIterable(jsonDecode(body)))
         .map((s) => Filter.fromJson(s));
   }
-
-
-
-
 }

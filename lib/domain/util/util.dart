@@ -14,9 +14,6 @@ class Util {
     return s.length >= length ? true : false;
   }
 
-
-
-
   static String getLocalTimeAgoAndTime(int time) {
     return getLocalTimeAgo(time) +
         "\n" +
@@ -35,9 +32,7 @@ class Util {
         .format(new DateTime.fromMillisecondsSinceEpoch(time).toLocal());
   }
 
-  static DateTime getLocalDateTime(int time){
-  return  new DateTime.fromMillisecondsSinceEpoch(time).toLocal();
+  static DateTime getLocalDateTime(int time) {
+    return new DateTime.fromMillisecondsSinceEpoch(time).toLocal();
   }
-
-
 }

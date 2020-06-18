@@ -6,20 +6,20 @@ import 'package:intl/intl.dart';
 
 class UiHelper {
   static BuildContext currentScaffoldContext;
+
   static void setCurrentScaffoldContext(BuildContext context) {
     currentScaffoldContext = context;
   }
 
   static void _showSms(String error) {
     print(error);
-    Scaffold.of(currentScaffoldContext).showSnackBar(SnackBar(
-        content: Text(error == null ? "Error" : error)));
+    Scaffold.of(currentScaffoldContext)
+        .showSnackBar(SnackBar(content: Text(error == null ? "Error" : error)));
   }
 
   static void showError(String error) {
     _showSms(error);
   }
-
 
   int month = 1;
   int year;
@@ -51,19 +51,16 @@ class UiHelper {
     _showDialog(context, "Error", "username or password not valid");
   }
 
-
   static String formatTime(TimeOfDay t) {
     final now = new DateTime.now();
     DateTime dateTime =
-    new DateTime(now.year, now.month, now.day, t.hour, t.minute);
+        new DateTime(now.year, now.month, now.day, t.hour, t.minute);
     return DateFormat("HH:mm").format(dateTime);
   }
 
   static Widget getCountryFlag(String countryCode) {
-    if(countryCode=="World")
-      return Icon(Icons.terrain); //TODO put word icon
-    if (countryCode == null)
-      return Container();
+    if (countryCode == "World") return Icon(Icons.terrain); //TODO put word icon
+    if (countryCode == null) return Container();
     try {
       return Flags.getMiniFlag(countryCode, null, 50);
     } catch (e) {
@@ -72,8 +69,7 @@ class UiHelper {
   }
 
   static Widget getCountryFlagMax(String countryCode) {
-    if (countryCode == null)
-      return Container();
+    if (countryCode == null) return Container();
     try {
       String assetName = 'packages/flag/res/svg1/' + countryCode + '.svg';
       Widget svg = new SvgPicture.asset(
@@ -87,14 +83,13 @@ class UiHelper {
     }
   }
 
-
-  static TileLayerOptions getMapTile(){
-  return  TileLayerOptions(
+  static TileLayerOptions getMapTile() {
+    return TileLayerOptions(
       urlTemplate: "https://api.tiles.mapbox.com/v4/"
           "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
       additionalOptions: {
         'accessToken':
-        'pk.eyJ1IjoiZGFma3VhbHRpbiIsImEiOiJjazhpeGY1NHMwOHoyM2txbHgyajlleGgyIn0.nt_pd-RsSMAfR6g-LKgC3A',
+            'pk.eyJ1IjoiZGFma3VhbHRpbiIsImEiOiJjazhpeGY1NHMwOHoyM2txbHgyajlleGgyIn0.nt_pd-RsSMAfR6g-LKgC3A',
         'id': 'mapbox.streets',
       },
 
@@ -102,12 +97,15 @@ class UiHelper {
       //   subdomains: ['a', 'b', 'c'],
       //  urlTemplate: 'http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg',
     );
-
   }
 
-  static Widget getHintedTextFormField(String hint, bool obscure,
+  static Widget getHintedTextFormField(
+      String hint,
+      bool obscure,
       Function onSaved,
-      IconData icon, Function(String) validator, Color primary) {
+      IconData icon,
+      Function(String) validator,
+      Color primary) {
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20),
       child: TextFormField(
@@ -154,8 +152,8 @@ class UiHelper {
       highlightColor: highlightColor,
       elevation: 0.0,
       color: fillColor,
-      shape: RoundedRectangleBorder(
-          borderRadius: new BorderRadius.circular(30.0)),
+      shape:
+          RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
       child: Text(
         text,
         style: TextStyle(
@@ -166,5 +164,4 @@ class UiHelper {
       },
     );
   }
-
 }

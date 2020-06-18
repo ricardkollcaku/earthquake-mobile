@@ -1,7 +1,5 @@
 import 'package:device_info/device_info.dart';
-import 'package:earthquake/data/model/country.dart';
 import 'package:earthquake/domain/services/api_service.dart';
-import 'package:earthquake/domain/services/filter_service.dart';
 import 'package:earthquake/domain/services/firebase_service.dart';
 import 'package:earthquake/domain/services/shared_prefs_service.dart';
 import 'package:earthquake/domain/services/user_service.dart';
@@ -13,7 +11,8 @@ class SplashScreenService {
   UserService _userService;
   DeviceInfoPlugin _deviceInfo;
   ApiService _apiService;
-FirebaseService _firebaseService;
+  FirebaseService _firebaseService;
+
   SplashScreenService() {
     _sharedPrefsService = new SharedPrefsService();
     _userService = new UserService();
@@ -27,9 +26,8 @@ FirebaseService _firebaseService;
   }
 
   Stream<bool> isLogin() {
-    return _userService.isLogIn()
-        .flatMap((isLogin) =>
-    isLogin ? setTokenToApiService(isLogin) : Stream.value(isLogin));
+    return _userService.isLogIn().flatMap((isLogin) =>
+        isLogin ? setTokenToApiService(isLogin) : Stream.value(isLogin));
   }
 
   Stream<String> serverHeartBeat() {
@@ -50,13 +48,15 @@ FirebaseService _firebaseService;
   }
 
   Stream<bool> saveCurrentUserOnShp(bool isLogin) {
-    return _apiService.getCurrentUser()
+    return _apiService
+        .getCurrentUser()
         .flatMap((user) => _userService.setUser(user))
         .map((user) => isLogin);
   }
 
   Stream<bool> setTokenToApiService(bool isLogin) {
-    return _sharedPrefsService.getToken()
+    return _sharedPrefsService
+        .getToken()
         .map((token) => setToken(token))
         .map((token) => isLogin);
   }
@@ -65,13 +65,11 @@ FirebaseService _firebaseService;
     return _apiService.setToken(token);
   }
 
-  Stream<bool> logoutUser(){
+  Stream<bool> logoutUser() {
     return _userService.logout();
   }
 
- Stream<String> registerFirebaseToken() {
+  Stream<String> registerFirebaseToken() {
     return _firebaseService.registerToken();
- }
-
-
+  }
 }

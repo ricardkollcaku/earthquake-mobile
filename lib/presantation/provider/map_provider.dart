@@ -3,7 +3,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
 
-
 class MapProvider {
   static LatLng _currentLocation;
   static Distance _distance;

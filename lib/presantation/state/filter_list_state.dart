@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import '../my_colors.dart';
 
 class FilterListState extends State<FilterListFragment> {
-
   List<Filter> _filterList;
   FilterListView _filterListView;
   FilterService _filterService;
@@ -20,48 +19,46 @@ class FilterListState extends State<FilterListFragment> {
     initField();
   }
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    _appBarProvider.context=context;
-
+    _appBarProvider.context = context;
 
     return CustomScrollView(
-
-      slivers: <Widget>[ SliverAppBar(
-        iconTheme: IconThemeData(color: Colors.white, size: 10.0),
-        actions: _appBarProvider.getActions(_scaffoldKey),
-        pinned: true,
-        expandedHeight: 200.0,
-        backgroundColor: MyColors.accent,
-        flexibleSpace: FlexibleSpaceBar(
-          background: Image.network(
-            "https://img.freepik.com/free-vector/earthqauke-background-scene_1308-25987.jpg?size=626&ext=jpg",
-            fit: BoxFit.cover,),
-          title: Text("My Filters",),
-
+      slivers: <Widget>[
+        SliverAppBar(
+          iconTheme: IconThemeData(color: Colors.white, size: 10.0),
+          actions: _appBarProvider.getActions(_scaffoldKey),
+          pinned: true,
+          expandedHeight: 200.0,
+          backgroundColor: MyColors.accent,
+          flexibleSpace: FlexibleSpaceBar(
+            background: Image.network(
+              "https://img.freepik.com/free-vector/earthqauke-background-scene_1308-25987.jpg?size=626&ext=jpg",
+              fit: BoxFit.cover,
+            ),
+            title: Text(
+              "My Filters",
+            ),
+          ),
         ),
-      ), SliverList(
-          delegate: SliverChildBuilderDelegate(
-
-                (BuildContext context, int index) {
-              return _filterListView.buildItem(
-                  _filterList[index], getConfirmDelete, context, refreshState);
-            },
-            childCount: _filterList.length,
-          )),
-      ]
-      ,
+        SliverList(
+            delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            return _filterListView.buildItem(
+                _filterList[index], getConfirmDelete, context, refreshState);
+          },
+          childCount: _filterList.length,
+        )),
+      ],
     );
 
     return ListView.builder(
         itemCount: _filterList.length,
         itemBuilder: (BuildContext context, int index) {
           return _filterListView.buildItem(
-              _filterList[index], getConfirmDelete,context,refreshState);
-        }
-    );
+              _filterList[index], getConfirmDelete, context, refreshState);
+        });
   }
 
   Future<bool> getConfirmDelete(Filter filter) {
@@ -92,19 +89,15 @@ class FilterListState extends State<FilterListFragment> {
     getData(addRefreshing);
   }
 
-
   Future<void> getData(Function function) {
-    return _filterService.getAllFilters()
+    return _filterService
+        .getAllFilters()
         .toList()
         .asStream()
         .map(function)
         .listen(onData)
         .asFuture();
   }
-
-
-
-
 
   List<Filter> addRefreshing(List<Filter> event) {
     setState(() {
@@ -113,22 +106,16 @@ class FilterListState extends State<FilterListFragment> {
     return event;
   }
 
-
-  void onData(void event) {
-  }
-
+  void onData(void event) {}
 
   deleteFilter(Filter filter) {
-    _filterService.remove(filter).listen((s) =>
-        Navigator.of(context).pop(true));
+    _filterService
+        .remove(filter)
+        .listen((s) => Navigator.of(context).pop(true));
   }
 
- void refreshState(dynamic a) {
+  void refreshState(dynamic a) {
     _filterList = new List();
-     getData(addRefreshing).asStream().listen(onData);
+    getData(addRefreshing).asStream().listen(onData);
   }
-
-
-
-
 }

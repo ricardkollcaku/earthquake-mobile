@@ -24,38 +24,36 @@ class SettingsState extends State<SettingsFragment> {
     _appBarProvider.context = context;
 
     return CustomScrollView(
-      slivers: <Widget>[ SliverAppBar(
-        iconTheme: IconThemeData(color: Colors.white, size: 10.0),
-        actions: _appBarProvider.getActions(_scaffoldKey),
-        pinned: true,
-        expandedHeight: 200.0,
-        backgroundColor: MyColors.accent,
-        flexibleSpace: FlexibleSpaceBar(
-          background: Image.network(
-            "https://static.makeuseof.com/wp-content/uploads/2018/01/android-settings-670x335.jpg",
-            fit: BoxFit.cover,),
-          title: Text("My Settings",),
-
+      slivers: <Widget>[
+        SliverAppBar(
+          iconTheme: IconThemeData(color: Colors.white, size: 10.0),
+          actions: _appBarProvider.getActions(_scaffoldKey),
+          pinned: true,
+          expandedHeight: 200.0,
+          backgroundColor: MyColors.accent,
+          flexibleSpace: FlexibleSpaceBar(
+            background: Image.network(
+              "https://static.makeuseof.com/wp-content/uploads/2018/01/android-settings-670x335.jpg",
+              fit: BoxFit.cover,
+            ),
+            title: Text(
+              "My Settings",
+            ),
+          ),
         ),
-      ), SliverList(
-          delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                return getSettingsWidget(index);
-              },
-              childCount: 3
-          )),
-      ]
-      ,
+        SliverList(
+            delegate:
+                SliverChildBuilderDelegate((BuildContext context, int index) {
+          return getSettingsWidget(index);
+        }, childCount: 3)),
+      ],
     );
   }
-
 
   void initFields() {
     _userService = new UserService();
     _appBarProvider = new AppBarProvider(context);
-
   }
-
 
   Widget getNotification() {
     return Card(
@@ -72,7 +70,8 @@ class SettingsState extends State<SettingsFragment> {
       child: SwitchListTile(
         value: UserService.user.fullDatabaseSearch,
         title: Text("Search all Earthquakes"),
-        subtitle: Text("When is not activated it searches for last 100 days , When you activate it search for all earthquakes but this reduce app performance"),
+        subtitle: Text(
+            "When is not activated it searches for last 100 days , When you activate it search for all earthquakes but this reduce app performance"),
         onChanged: setSearchInAllDb,
       ),
     );
@@ -106,12 +105,9 @@ class SettingsState extends State<SettingsFragment> {
   }
 
   Widget getSettingsWidget(int index) {
-    if (index == 0)
-      return getChangePassword();
-    if (index == 1)
-      return getNotification();
-    if (index == 2)
-      return getSearchInFullDb();
+    if (index == 0) return getChangePassword();
+    if (index == 1) return getNotification();
+    if (index == 2) return getSearchInFullDb();
   }
 
   void setSearchInAllDb(bool value) {

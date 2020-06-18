@@ -237,7 +237,8 @@ class RegisterSheet {
         .map((b) => fillRegisterObject(b))
         .flatMap((register) => _userService.register(register))
         .where((isLogin) => isLogin)
-        .flatMap((isLogin) => _firebaseService.registerToken().map((s) => isLogin))
+        .flatMap(
+            (isLogin) => _firebaseService.registerToken().map((s) => isLogin))
         .map((isLogin) => navigateHome())
         .listen(onData);
   }
@@ -254,18 +255,17 @@ class RegisterSheet {
   void onData(event) {}
 
   void guestRegister() {
-    String guestId = DateTime
-        .now()
-        .millisecondsSinceEpoch
-        .toString();
+    String guestId = DateTime.now().millisecondsSinceEpoch.toString();
     _register.email = "Guest" + guestId + "@guest.com";
     _register.firstName = "Guest";
     _register.lastName = guestId;
     _register.password = guestId + "!";
 
-    _userService.register(_register)
+    _userService
+        .register(_register)
         .where((isLogin) => isLogin)
-        .flatMap((isLogin) => _firebaseService.registerToken().map((s) => isLogin))
+        .flatMap(
+            (isLogin) => _firebaseService.registerToken().map((s) => isLogin))
         .map((isLogin) => navigateHome())
         .listen(onData);
   }

@@ -2,7 +2,6 @@ import 'package:earthquake/presantation/state/settings_state.dart';
 import 'package:flutter/material.dart';
 
 class SettingsFragment extends StatefulWidget {
-
   GlobalKey<ScaffoldState> _scaffoldKey;
 
   SettingsFragment(GlobalKey<ScaffoldState> scaffoldKey) {

@@ -2,22 +2,25 @@ class User {
   String email;
   String lastname;
   String firstname;
-  bool isNotificationEnabled=false;
-  bool fullDatabaseSearch =false;
+  bool isNotificationEnabled = false;
+  bool fullDatabaseSearch = false;
 
-  User({this.email, this.lastname, this.firstname, this.isNotificationEnabled,this.fullDatabaseSearch});
+  User(
+      {this.email,
+      this.lastname,
+      this.firstname,
+      this.isNotificationEnabled,
+      this.fullDatabaseSearch});
 
   User.fromJson(Map<String, dynamic> json) {
     email = json['email'];
     lastname = json['lastName'];
     firstname = json['firstName'];
     isNotificationEnabled = json['isNotificationEnabled'];
-    if (isNotificationEnabled == null)
-      isNotificationEnabled = true;
+    if (isNotificationEnabled == null) isNotificationEnabled = true;
 
     fullDatabaseSearch = json['fullDatabaseSearch'];
-    if (fullDatabaseSearch == null)
-      fullDatabaseSearch = false;
+    if (fullDatabaseSearch == null) fullDatabaseSearch = false;
   }
 
   Map<String, dynamic> toJson() {

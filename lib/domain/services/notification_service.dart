@@ -1,18 +1,19 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class NotificationService{
+class NotificationService {
   FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
-void initNotifications(){
-  _flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-  final settingsAndroid = AndroidInitializationSettings('ic_launcher');
-  final settingsIOS = IOSInitializationSettings(
-      onDidReceiveLocalNotification: (id, title, body, payload) =>
-          onSelectNotification(payload));
 
-  _flutterLocalNotificationsPlugin.initialize(
-      InitializationSettings(settingsAndroid, settingsIOS),
-      onSelectNotification: onSelectNotification);
-}
+  void initNotifications() {
+    _flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    final settingsAndroid = AndroidInitializationSettings('ic_launcher');
+    final settingsIOS = IOSInitializationSettings(
+        onDidReceiveLocalNotification: (id, title, body, payload) =>
+            onSelectNotification(payload));
+
+    _flutterLocalNotificationsPlugin.initialize(
+        InitializationSettings(settingsAndroid, settingsIOS),
+        onSelectNotification: onSelectNotification);
+  }
 
   Future onSelectNotification(String payload) async {
     print(payload);
@@ -34,16 +35,17 @@ void initNotifications(){
     return NotificationDetails(androidChannelSpecifics, iOSChannelSpecifics);
   }
 
-  Future showOngoingNotification(FlutterLocalNotificationsPlugin notifications,
-      {
-        String title,
-        String body,
-        int id = 0,
-      }) =>
+  Future showOngoingNotification(
+    FlutterLocalNotificationsPlugin notifications, {
+    String title,
+    String body,
+    int id = 0,
+  }) =>
       _showNotification(notifications,
           title: title, body: body, id: id, type: _ongoing);
 
-  Future _showNotification(FlutterLocalNotificationsPlugin notifications, {
+  Future _showNotification(
+    FlutterLocalNotificationsPlugin notifications, {
     String title,
     String body,
     NotificationDetails type,
@@ -53,6 +55,4 @@ void initNotifications(){
 
   FlutterLocalNotificationsPlugin get flutterLocalNotificationsPlugin =>
       _flutterLocalNotificationsPlugin;
-
-
 }

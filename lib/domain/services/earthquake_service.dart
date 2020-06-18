@@ -17,25 +17,27 @@ class EarthquakeService {
     _userService = new UserService();
   }
 
-  Stream<Earthquake> getAllEarthquakes(int pageNumber, int elementPerPage,{Filter filter}) {
-    return _userService.isLogIn().flatMap((t) =>
-        getEarthquakesByUserType(t, pageNumber, elementPerPage,filter: filter));
+  Stream<Earthquake> getAllEarthquakes(int pageNumber, int elementPerPage,
+      {Filter filter}) {
+    return _userService.isLogIn().flatMap((t) => getEarthquakesByUserType(
+        t, pageNumber, elementPerPage,
+        filter: filter));
   }
 
-  Stream<Earthquake> getEarthquakesByUserType(bool t, int pageNumber,
-      int elementPerPage,{Filter filter}) {
-    if(filter!=null)
+  Stream<Earthquake> getEarthquakesByUserType(
+      bool t, int pageNumber, int elementPerPage,
+      {Filter filter}) {
+    if (filter != null)
+      return t
+          ? _apiService.getUserAllEarthquakes(pageNumber, elementPerPage)
+          : _apiService.getAllEarthquakes(pageNumber, elementPerPage,
+              mag: filter.minMagnitude, countryKey: filter.countryKey);
     return t
-        ? _apiService.getUserAllEarthquakes(pageNumber, elementPerPage)
-        : _apiService.getAllEarthquakes(pageNumber, elementPerPage,mag: filter.minMagnitude,countryKey: filter.countryKey);
-    return  t
         ? _apiService.getUserAllEarthquakes(pageNumber, elementPerPage)
         : _apiService.getAllEarthquakes(pageNumber, elementPerPage);
   }
 
-
-Stream<bool> isLogin(){
+  Stream<bool> isLogin() {
     return _userService.isLogIn();
-}
-
+  }
 }

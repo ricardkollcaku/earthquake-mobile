@@ -3,19 +3,19 @@ class Country {
   String countryCode;
   int key;
 
-  Country({this.country, this.countryCode,this.key});
+  Country({this.country, this.countryCode, this.key});
 
   Country.fromJson(Map<String, dynamic> json) {
     country = json['country'];
     countryCode = json['countryCode'];
-    key=json['key'];
+    key = json['key'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['country'] = this.country;
     data['countryCode'] = this.countryCode;
-    data['key']=this.key;
+    data['key'] = this.key;
     return data;
   }
 
@@ -27,13 +27,8 @@ class Country {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Country &&
-              runtimeType == other.runtimeType &&
-              key == other.key;
+      other is Country && runtimeType == other.runtimeType && key == other.key;
 
   @override
   int get hashCode => key.hashCode;
-
-
-
 }

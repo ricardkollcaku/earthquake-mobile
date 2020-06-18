@@ -24,8 +24,8 @@ class MainLoginState extends State<MainLoginActivity> {
     initVariables();
   }
 
-  static final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<
-      ScaffoldState>();
+  static final GlobalKey<ScaffoldState> _scaffoldKey =
+      new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -42,34 +42,33 @@ class MainLoginState extends State<MainLoginActivity> {
     );
   }
 
-
   BottomNavigationBar getBottomNavigationBar() {
     return BottomNavigationBar(
       currentIndex: _selectedBottomNavigationBarIndex,
       onTap: _onBottomNavigationBarItemSelected,
-      items:
-      _fragments.map((choice) => choice.prop2)
+      items: _fragments
+          .map((choice) => choice.prop2)
           .map((dynami) => ((dynami as BottomNavigationBarItem)))
           .toList(),
     );
   }
 
-  void onSearchClicked() {
-  }
-
+  void onSearchClicked() {}
 
   List<Choice> _fragments = <Choice>[
-    Choice(prop1: EarthquakeListFragment(_scaffoldKey),
+    Choice(
+        prop1: EarthquakeListFragment(_scaffoldKey),
         prop2: BottomNavigationBarItem(
-        icon: Icon(Icons.map), title: Text('Earthquake'))),
+            icon: Icon(Icons.map), title: Text('Earthquake'))),
     Choice(
-        prop1: FilterListFragment(_scaffoldKey), prop2: BottomNavigationBarItem(
-        icon: Icon(Icons.filter_tilt_shift), title: Text('Filters'))),
+        prop1: FilterListFragment(_scaffoldKey),
+        prop2: BottomNavigationBarItem(
+            icon: Icon(Icons.filter_tilt_shift), title: Text('Filters'))),
     Choice(
-        prop1: SettingsFragment(_scaffoldKey), prop2: BottomNavigationBarItem(
-        icon: Icon(Icons.settings), title: Text('Settings')))
+        prop1: SettingsFragment(_scaffoldKey),
+        prop2: BottomNavigationBarItem(
+            icon: Icon(Icons.settings), title: Text('Settings')))
   ];
-
 
   void _onBottomNavigationBarItemSelected(int value) {
     setState(() {
@@ -92,13 +91,10 @@ class MainLoginState extends State<MainLoginActivity> {
 
   void logout() {
     _userService.logout().listen(onData);
-    Navigator.of(_buildContext)
-        .pushReplacementNamed(MainNonLoginActivity.tag);
+    Navigator.of(_buildContext).pushReplacementNamed(MainNonLoginActivity.tag);
   }
 
-
-  void onData(dynamic o) {
-  }
+  void onData(dynamic o) {}
 
   User _setUser(User user) {
     UserService.user = user;
@@ -106,18 +102,25 @@ class MainLoginState extends State<MainLoginActivity> {
   }
 
   Widget _getFab() {
-    return FloatingActionButton(child: Icon(Icons.add,color: MyColors.white,),onPressed: onFabPressed,);
+    return FloatingActionButton(
+      child: Icon(
+        Icons.add,
+        color: MyColors.white,
+      ),
+      onPressed: onFabPressed,
+    );
   }
 
   void onFabPressed() {
     Navigator.of(_buildContext)
-        .pushNamed(FilterActivity.tag).asStream().listen(openFilterFragment);
+        .pushNamed(FilterActivity.tag)
+        .asStream()
+        .listen(openFilterFragment);
   }
 
   void openFilterFragment(Object event) {
-    (_currentActiveFragment as FilterListFragment).filterListState.refreshState(
-        null);
+    (_currentActiveFragment as FilterListFragment)
+        .filterListState
+        .refreshState(null);
   }
 }
-
-

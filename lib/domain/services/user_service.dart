@@ -6,11 +6,11 @@ import 'package:earthquake/domain/services/shared_prefs_service.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'api_service.dart';
+
 class UserService {
   SharedPrefsService _sharedPrefsService;
   ApiService _apiService;
   static User user;
-
 
   UserService() {
     _sharedPrefsService = new SharedPrefsService();
@@ -32,7 +32,8 @@ class UserService {
   }
 
   Stream<bool> login(Login login) {
-    return _apiService.login(login)
+    return _apiService
+        .login(login)
         .flatMap((token) => _sharedPrefsService.setToken(token))
         .map((token) => true)
         .switchIfEmpty(Stream.value(false))
@@ -40,10 +41,11 @@ class UserService {
   }
 
   Stream<bool> register(Register register) {
-    return _apiService.register(register)
+    return _apiService
+        .register(register)
         .flatMap((token) => _sharedPrefsService.setToken(token))
-        .map((token)=>setToken(token))
-        .flatMap((token)=>getCurrentUser())
+        .map((token) => setToken(token))
+        .flatMap((token) => getCurrentUser())
         .map((token) => true)
         .switchIfEmpty(Stream.value(false))
         .flatMap((isLogin) => _sharedPrefsService.setLogin(isLogin));
@@ -71,8 +73,7 @@ class UserService {
     return _sharedPrefsService.setUser(user);
   }
 
-
-  Stream<String> setFirebaseToken(String token){
+  Stream<String> setFirebaseToken(String token) {
     print(token);
     return _apiService.setFirebaseToken(token);
   }
@@ -82,18 +83,17 @@ class UserService {
         .changeSearchInFullDb(user)
         .flatMap((user) => setUser(user));
   }
+
   String setToken(String token) {
     return _apiService.setToken(token);
   }
 
- Stream<User> getCurrentUser() {
-   return _apiService.getCurrentUser()
-        .map((user)=>setCurrentUser(user));
- }
+  Stream<User> getCurrentUser() {
+    return _apiService.getCurrentUser().map((user) => setCurrentUser(user));
+  }
 
- User setCurrentUser(User currentUser){
-    user=currentUser;
+  User setCurrentUser(User currentUser) {
+    user = currentUser;
     return user;
- }
-
+  }
 }

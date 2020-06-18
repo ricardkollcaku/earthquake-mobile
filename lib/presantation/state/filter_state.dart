@@ -3,11 +3,8 @@ import 'package:earthquake/data/model/filter.dart';
 import 'package:earthquake/domain/services/filter_service.dart';
 import 'package:earthquake/domain/util/util.dart';
 import 'package:earthquake/presantation/activity/filter_activity.dart';
-import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong/latlong.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 
@@ -27,9 +24,9 @@ class FilterState extends State<FilterActivity> {
   TextEditingController _filterName = new TextEditingController();
   TextEditingController _magType = new TextEditingController();
   bool _isEdit = false;
-  bool _actAsDialog=false;
+  bool _actAsDialog = false;
 
-  FilterState({Filter filter,bool actAsDialog=false}) {
+  FilterState({Filter filter, bool actAsDialog = false}) {
     _filter = filter;
     _actAsDialog = actAsDialog;
     initFields();
@@ -64,7 +61,6 @@ class FilterState extends State<FilterActivity> {
           }, childCount: 1)),
         ],
       );
-
     }));
   }
 
@@ -136,9 +132,9 @@ class FilterState extends State<FilterActivity> {
   }
 
   void saveFilter() {
-    if(_actAsDialog){
-      if(_formKey.currentState.validate()) {
-        Navigator.pop(context,saveState(true));
+    if (_actAsDialog) {
+      if (_formKey.currentState.validate()) {
+        Navigator.pop(context, saveState(true));
       }
       return;
     }
@@ -201,8 +197,6 @@ class FilterState extends State<FilterActivity> {
             event.where((t) => t.country == _filter.country).toList()[0];
     });
   }
-
-
 
   DropdownMenuItem<Country> createDropDown(Country e) {
     return new DropdownMenuItem(
@@ -300,9 +294,15 @@ class FilterState extends State<FilterActivity> {
     );
   }
 
- Widget getIfActAsDialog() {
-    if(_actAsDialog)
-  return Column(children: <Widget>[Text("You are not logged in as a user, so filter will be limited for you, Login or register to have full application and filter features, Login to have all earthquakes access and multiple filters"),SizedBox(height: 8.0),],)    ;
-      return Container();
- }
+  Widget getIfActAsDialog() {
+    if (_actAsDialog)
+      return Column(
+        children: <Widget>[
+          Text(
+              "You are not logged in as a user, so filter will be limited for you, Login or register to have full application and filter features, Login to have all earthquakes access and multiple filters"),
+          SizedBox(height: 8.0),
+        ],
+      );
+    return Container();
+  }
 }

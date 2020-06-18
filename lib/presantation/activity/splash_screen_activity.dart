@@ -1,7 +1,6 @@
 import 'package:earthquake/presantation/state/splash_screen_state.dart';
 import 'package:flutter/material.dart';
 
-
 class SplashScreenActivity extends StatefulWidget {
   static const String tag = 'splash-screen-page';
 
@@ -9,5 +8,4 @@ class SplashScreenActivity extends StatefulWidget {
   State<StatefulWidget> createState() {
     return SplashScreenState();
   }
-
 }

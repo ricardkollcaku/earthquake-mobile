@@ -5,7 +5,8 @@ class ErrorModel {
   String path;
   String timeStamp;
 
-  ErrorModel({this.status, this.title, this.message, this.path, this.timeStamp});
+  ErrorModel(
+      {this.status, this.title, this.message, this.path, this.timeStamp});
 
   ErrorModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
