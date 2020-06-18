@@ -26,7 +26,7 @@ class MapProvider {
   static String getDistanceInKm(Geometry latLng) {
     if (_currentLocation == null ||
         (_currentLocation.latitude == 0 && _currentLocation.longitude == 0))
-      return "?";
+      return "Your location is not detected";
     final double km = _distance.as(
         LengthUnit.Kilometer,
         new LatLng(latLng.coordinates[1], latLng.coordinates[0]),

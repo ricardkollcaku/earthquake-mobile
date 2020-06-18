@@ -2,12 +2,10 @@ import 'package:earthquake/data/model/earthquake.dart';
 import 'package:earthquake/domain/util/util.dart';
 import 'package:earthquake/presantation/activity/chat_activity.dart';
 import 'package:earthquake/presantation/activity/earthquake_activity.dart';
-import 'package:earthquake/presantation/provider/map_provider.dart';
 import 'package:earthquake/presantation/my_colors.dart';
-import 'package:flag/flag.dart';
+import 'package:earthquake/presantation/provider/map_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
 
 import '../ui_helper.dart';
@@ -18,6 +16,7 @@ class EarthquakeState extends State<EarthquakeActivity> {
   Earthquake _earthquake;
   ScrollController _controller;
   bool silverCollapsed = false;
+
   EarthquakeState(Earthquake earthquake) {
     _earthquake = earthquake;
     initFields();
@@ -92,9 +91,11 @@ class EarthquakeState extends State<EarthquakeActivity> {
       height: 300,
       child: FlutterMap(
         options: new MapOptions(
-          center: new LatLng(earthquake.geometry.coordinates[1],
-              earthquake.geometry.coordinates[0]),
-          zoom: 8.0,
+            center: new LatLng(earthquake.geometry.coordinates[1],
+                earthquake.geometry.coordinates[0]),
+            zoom: 8.0,
+            minZoom: 1
+
         ),
         layers: [
           UiHelper.getMapTile(),
@@ -125,61 +126,68 @@ class EarthquakeState extends State<EarthquakeActivity> {
     if (_widgets != null)
       return _widgets;
     _widgets = new List();
-
-    _widgets.add(getText(Icons.title, truncateWithEllipsis(25, "Title"),
-        truncateWithEllipsis(35, _earthquake.properties.title.toString())));
-
-    _widgets.add(getText(Icons.place, truncateWithEllipsis(25, "Country"),
-        truncateWithEllipsis(35, _earthquake.country.toString())));
-    _widgets.add(getText(Icons.mobile_screen_share, truncateWithEllipsis(25, "Distance"),
-        truncateWithEllipsis(35, MapProvider.getDistanceInKm(_earthquake.geometry))));
-
-    _widgets.add(getText(Icons.gps_fixed, truncateWithEllipsis(25, "Place"),
-        truncateWithEllipsis(35, _earthquake.properties.place.toString())));
+    if (_earthquake.properties.title != null)
+      _widgets.add(getText(Icons.title, truncateWithEllipsis(25, "Title"),
+          truncateWithEllipsis(35, _earthquake.properties.title.toString())));
+    if (_earthquake.country != null)
+      _widgets.add(getText(Icons.place, truncateWithEllipsis(25, "Country"),
+          truncateWithEllipsis(35, _earthquake.country.toString())));
 
     _widgets.add(
-        getText(Icons.directions_run, truncateWithEllipsis(25, "Magnitude"),
-            truncateWithEllipsis(35, _earthquake.properties.mag.toString())));
-
+        getText(Icons.mobile_screen_share, truncateWithEllipsis(25, "Distance"),
+        truncateWithEllipsis(35, MapProvider.getDistanceInKm(_earthquake.geometry))));
+    if (_earthquake.properties.place != null)
+      _widgets.add(getText(Icons.gps_fixed, truncateWithEllipsis(25, "Place"),
+          truncateWithEllipsis(35, _earthquake.properties.place.toString())));
+    if (_earthquake.properties.mag != null)
+      _widgets.add(
+          getText(Icons.directions_run, truncateWithEllipsis(25, "Magnitude"),
+              truncateWithEllipsis(35, _earthquake.properties.mag.toString())));
+    if (_earthquake.properties.magType != null)
     _widgets.add(
         getText(Icons.settings, truncateWithEllipsis(25, "Magnitude Type"),
             truncateWithEllipsis(
                 35, _earthquake.properties.magType.toString())));
+    if (_earthquake.depth != null)
+      _widgets.add(getText(Icons.broken_image, truncateWithEllipsis(25, "Depth"),
+          truncateWithEllipsis(35, _earthquake.depth.toString() + " KM")));
+    if (_earthquake.properties.status != null)
+      _widgets.add(getText(Icons.beenhere, truncateWithEllipsis(25, "Status"),
+          truncateWithEllipsis(35, _earthquake.properties.status.toString())));
 
-    _widgets.add(getText(Icons.broken_image, truncateWithEllipsis(25, "Depth"),
-        truncateWithEllipsis(35, _earthquake.depth.toString() + " KM")));
+    if (_earthquake.properties.type != null)
+      _widgets.add(getText(Icons.merge_type, truncateWithEllipsis(25, "Type"),
+          truncateWithEllipsis(35, _earthquake.properties.type.toString())));
 
-    _widgets.add(getText(Icons.beenhere, truncateWithEllipsis(25, "Status"),
-        truncateWithEllipsis(35, _earthquake.properties.status.toString())));
+    if (_earthquake.properties.time != null)
+      _widgets.add(getText(Icons.timer, truncateWithEllipsis(25, "Local Time"),
+          truncateWithEllipsis(35, Util.getLocalTime(_earthquake.properties.time))));
 
+    if (_earthquake.properties.tsunami != null)
+      _widgets.add(getText(Icons.warning, truncateWithEllipsis(25, "Tsunami"),
+          truncateWithEllipsis(
+              35, _earthquake.properties.tsunami == 0 ? "No" : "Yes")));
 
-    _widgets.add(getText(Icons.merge_type, truncateWithEllipsis(25, "Type"),
-        truncateWithEllipsis(35, _earthquake.properties.type.toString())));
-
-
-    _widgets.add(getText(Icons.timer, truncateWithEllipsis(25, "Local Time"),
-        truncateWithEllipsis(35, Util.getLocalTime(_earthquake.properties.time))));
-
-
-
-    _widgets.add(getText(Icons.warning, truncateWithEllipsis(25, "Tsunami"),
-        truncateWithEllipsis(
-            35, _earthquake.properties.tsunami == 0 ? "No" : "Yes")));
-
-
-    _widgets.add(
-        getText(Icons.timeline, truncateWithEllipsis(25, "Significant"),
-        truncateWithEllipsis(35, _earthquake.properties.sig.toString())));
-
-    _widgets.add(
-        getText(
-            Icons.gps_not_fixed, truncateWithEllipsis(25, "Seismic stations"),
-            truncateWithEllipsis(35, _earthquake.properties.nst.toString())));
-
+    if (_earthquake.properties.sig != null)
+      _widgets.add(
+          getText(Icons.timeline, truncateWithEllipsis(25, "Significant"),
+              truncateWithEllipsis(35, _earthquake.properties.sig.toString())));
+    if (_earthquake.properties.nst != null)
+      _widgets.add(
+          getText(
+              Icons.gps_not_fixed, truncateWithEllipsis(25, "Recorded in"),
+              truncateWithEllipsis(35,
+                  _earthquake.properties.nst == null ? "0" : _earthquake
+                      .properties.nst.toString() + " Seismic stations")));
+    if (_earthquake.properties.dmin != null)
     _widgets.add(
         getText(Icons.play_for_work,
             truncateWithEllipsis(25, "Distance from station"),
-            truncateWithEllipsis(35, _earthquake.properties.dmin.toString())));
+            truncateWithEllipsis(35,
+                (_earthquake.properties.dmin * 111.2).toStringAsPrecision(3) +
+                    " KM")));
+
+    _widgets.add(SizedBox(height: 150,));
 
 
     return _widgets;

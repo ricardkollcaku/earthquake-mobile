@@ -34,22 +34,21 @@ void initNotifications(){
     return NotificationDetails(androidChannelSpecifics, iOSChannelSpecifics);
   }
 
-  Future showOngoingNotification(
-      FlutterLocalNotificationsPlugin notifications, {
-         String title,
-         String body,
+  Future showOngoingNotification(FlutterLocalNotificationsPlugin notifications,
+      {
+        String title,
+        String body,
         int id = 0,
       }) =>
       _showNotification(notifications,
           title: title, body: body, id: id, type: _ongoing);
 
-  Future _showNotification(
-      FlutterLocalNotificationsPlugin notifications, {
-         String title,
-         String body,
-         NotificationDetails type,
-        int id = 0,
-      }) =>
+  Future _showNotification(FlutterLocalNotificationsPlugin notifications, {
+    String title,
+    String body,
+    NotificationDetails type,
+    int id = 0,
+  }) =>
       notifications.show(0, title, body, type);
 
   FlutterLocalNotificationsPlugin get flutterLocalNotificationsPlugin =>

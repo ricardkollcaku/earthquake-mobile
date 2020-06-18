@@ -13,7 +13,10 @@ class FilterListState extends State<FilterListFragment> {
   FilterListView _filterListView;
   FilterService _filterService;
   AppBarProvider _appBarProvider;
-  FilterListState() {
+  GlobalKey<ScaffoldState> _scaffoldKey;
+
+  FilterListState(GlobalKey<ScaffoldState> scaffoldKey) {
+    _scaffoldKey = scaffoldKey;
     initField();
   }
 
@@ -28,7 +31,7 @@ class FilterListState extends State<FilterListFragment> {
 
       slivers: <Widget>[ SliverAppBar(
         iconTheme: IconThemeData(color: Colors.white, size: 10.0),
-        actions: _appBarProvider.getActions(),
+        actions: _appBarProvider.getActions(_scaffoldKey),
         pinned: true,
         expandedHeight: 200.0,
         backgroundColor: MyColors.accent,

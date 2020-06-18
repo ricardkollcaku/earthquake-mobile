@@ -29,8 +29,10 @@ class EarthquakeListState extends State<EarthquakeListFragment> {
   AppBarProvider _appBarProvider;
   bool _isLogin=true;
   Filter _localNotLoginUserFilter;
+  GlobalKey<ScaffoldState> _scaffoldKey;
 
-  EarthquakeListState() {
+  EarthquakeListState(GlobalKey<ScaffoldState> scaffoldKey) {
+    _scaffoldKey = scaffoldKey;
     initField();
   }
 
@@ -40,7 +42,7 @@ class EarthquakeListState extends State<EarthquakeListFragment> {
     // TODO: implement build
 _appBarProvider.context=context;
 
-    return LoadAny(
+    return RefreshIndicator(child: LoadAny(
         onLoadMore: getLoadMore,
         status: _status,
         footerHeight: 40,
@@ -49,7 +51,10 @@ _appBarProvider.context=context;
         loadMoreBuilder: _earthquakeListView.loadMoreBuilder,
         child: CustomScrollView(
           controller: _controller, slivers: <Widget>[ SliverAppBar(
-          actions: _isLogin?_appBarProvider.getActions():_appBarProvider.getNonLoginActions(onLocalSearchClicked),
+          actions: _isLogin
+              ? _appBarProvider.getActions(_scaffoldKey)
+              : _appBarProvider.getNonLoginActions(
+              onLocalSearchClicked, _scaffoldKey),
           pinned: true,
           iconTheme: IconThemeData(color: Colors.white, size: 10.0),
           expandedHeight: 300.0,
@@ -70,7 +75,8 @@ _appBarProvider.context=context;
         ]
           ,
         )
-    );
+    ),
+    onRefresh: getRefresh,);
   }
 onLocalSearchClicked() async{
   _localNotLoginUserFilter = await Navigator.push(
@@ -90,6 +96,7 @@ onLocalSearchClicked() async{
           ],
           center: new LatLng(0, 0),
           zoom: 1,
+            minZoom: 1
         ),
         layers: [
           UiHelper.getMapTile(),
@@ -143,7 +150,7 @@ LatLng center = new LatLng(0,0);
     _earthquakeService.isLogin().listen((b)=>_isLogin=b);
     _earthquakeListView = new EarthquakeListView(40, getLoadMore,context);
     _pageNumber = 0;
-    _elementPerPage = 50;
+    _elementPerPage = 24;
     _appBarProvider = new AppBarProvider(context);
     getData(addRefreshing);
 

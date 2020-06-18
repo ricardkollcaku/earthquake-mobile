@@ -242,7 +242,5 @@ class EarthquakeListView {
   openEarthquake(Earthquake earthquake) {
     print(_context);
     Navigator.push(_context, MaterialPageRoute(builder: (BuildContext context) => EarthquakeActivity(earthquake)));
-
-
   }
 }

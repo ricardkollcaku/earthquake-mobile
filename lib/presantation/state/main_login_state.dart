@@ -24,10 +24,14 @@ class MainLoginState extends State<MainLoginActivity> {
     initVariables();
   }
 
+  static final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<
+      ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     _buildContext = context;
     return Scaffold(
+      key: _scaffoldKey,
       //    appBar: getAppBar(),
       floatingActionButton: _fab,
       body: Builder(builder: (BuildContext context) {
@@ -55,11 +59,14 @@ class MainLoginState extends State<MainLoginActivity> {
 
 
   List<Choice> _fragments = <Choice>[
-    Choice(prop1: EarthquakeListFragment(), prop2: BottomNavigationBarItem(
+    Choice(prop1: EarthquakeListFragment(_scaffoldKey),
+        prop2: BottomNavigationBarItem(
         icon: Icon(Icons.map), title: Text('Earthquake'))),
-    Choice(prop1: FilterListFragment(), prop2: BottomNavigationBarItem(
+    Choice(
+        prop1: FilterListFragment(_scaffoldKey), prop2: BottomNavigationBarItem(
         icon: Icon(Icons.filter_tilt_shift), title: Text('Filters'))),
-    Choice(prop1: SettingsFragment(), prop2: BottomNavigationBarItem(
+    Choice(
+        prop1: SettingsFragment(_scaffoldKey), prop2: BottomNavigationBarItem(
         icon: Icon(Icons.settings), title: Text('Settings')))
   ];
 

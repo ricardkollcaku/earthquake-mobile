@@ -64,7 +64,7 @@ class FilterState extends State<FilterActivity> {
           }, childCount: 1)),
         ],
       );
-      ;
+
     }));
   }
 

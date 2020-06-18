@@ -2,8 +2,8 @@ class User {
   String email;
   String lastname;
   String firstname;
-  bool isNotificationEnabled;
-  bool fullDatabaseSearch;
+  bool isNotificationEnabled=false;
+  bool fullDatabaseSearch =false;
 
   User({this.email, this.lastname, this.firstname, this.isNotificationEnabled,this.fullDatabaseSearch});
 
